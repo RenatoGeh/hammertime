@@ -3,16 +3,23 @@
 		[ {"path": "game"} ],
 	"settings":
 		{
-			"tab_size": 4,
+			"tab_size": 3,
 			"translate_tabs_to_space": false,
-			"rulers": [100]
+			"rulers": [100,101]
 		},
 	"build_systems":
 	[
 		{
 			"name": "Hammertime",
-			"working_dir": "${project_path}",
-			"cmd": ["gcc", "hammertime/main.c", "-o", "hammer"]
+			"working_dir": "${project_path}/game",
+			"cmd": ["gcc", "main.c", "-o", "hammer"],
+			"variants":
+			[
+				{
+					"name": "Run",
+					"cmd": ["${project_path}/game/hammer"]
+				}
+			]
 		}
 	]
 }

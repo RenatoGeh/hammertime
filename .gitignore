@@ -15,3 +15,7 @@
 *.exe
 *.out
 *.app
+
+*sublime-workspace
+game/hammer
+game/hammer.exe
