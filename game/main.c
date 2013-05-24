@@ -1,6 +1,9 @@
 #include "hammertime.h"
 #include <stdio.h>
+#include <stdlib.h>
 
-void load(int argn, char **args) {
-	printf("%d", argn);
+void load() {
+	body *b = newRectangle();
+	b->draw();
+	exit(0);
 }
