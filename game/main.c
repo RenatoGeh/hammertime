@@ -3,7 +3,10 @@
 #include <stdlib.h>
 
 void load() {
-	body *b = newRectangle();
+	Body *b = newRectangle();
 	b->draw();
-	exit(0);
+}
+
+void update(int dt) {
+	
 }

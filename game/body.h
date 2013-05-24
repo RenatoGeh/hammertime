@@ -6,14 +6,14 @@ struct bodystruct {
 	int x, y;
 	void (*draw)();
 };
-typedef struct bodystruct body;
+typedef struct bodystruct Body;
 
 void paintRectangle() {
 	printf("I'm a rectangle!\n");
 }
 
-body *newRectangle() {
-	body *b = malloc(sizeof(body));
+Body *newRectangle() {
+	Body *b = malloc(sizeof(Body));
 	b->draw = paintRectangle;
 	return b;
 }
