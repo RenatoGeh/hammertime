@@ -4,17 +4,36 @@
 
 struct bodystruct {
 	int x, y;
-	void (*draw)();
+	void (*draw)(struct bodystruct *, char[HEIGHT][WIDTH+1]);
 };
 typedef struct bodystruct Body;
 
-void paintRectangle() {
-	printf("I'm a rectangle!\n");
+Body* bodies[1000];
+int bsize = 0;
+
+void paintRectangle(Body *self, char terminal[HEIGHT][WIDTH+1]) {
+
+}
+
+void paintPoint(Body *self, char terminal[HEIGHT][WIDTH+1]) {
+	terminal[self->x][self->y] = '*';
+}
+
+void registerBody(Body *b) {
+	bodies[bsize++] = b;
 }
 
 Body *newRectangle() {
 	Body *b = malloc(sizeof(Body));
 	b->draw = paintRectangle;
+	return b;
+}
+
+Body *newPoint(int x, int y) {
+	Body *b = malloc(sizeof(Body));
+	b->draw = paintPoint;
+	b->x = x;
+	b->y = y;
 	return b;
 }
 
