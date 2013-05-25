@@ -12,11 +12,6 @@ struct nd {
 	struct nd *prev;
 };
 
-struct List {
-	void (*add)(LinkedList*, Body*);
-	int (*remove)(LinkedList*, Body*);
-};
-
 struct ll {
 	Node *head, *tail;
 	unsigned int size;
@@ -25,7 +20,7 @@ struct ll {
 	Body* (*get)(LinkedList*, int);
 };
 
-static void intern_add(LinkedList* list, Body* b) {
+static void _list_add(LinkedList* list, Body* b) {
 	int n = list->size;
 
 	if(n>1) {
@@ -43,7 +38,7 @@ static void intern_add(LinkedList* list, Body* b) {
 	list->size++;
 }
 
-static int intern_remove(LinkedList* list, Body* b) {
+static int _list_remove(LinkedList* list, Body* b) {
 	Node *n = list->head;
 
 	if(n->value==b) {
@@ -73,7 +68,7 @@ static int intern_remove(LinkedList* list, Body* b) {
 	return 0;
 }
 
-static Body* intern_get(LinkedList* list, int index) {
+static Body* _list_get(LinkedList* list, int index) {
 	register int i, size = list->size;
 	int n = index<=size/2;
 	Node *head = n?list->head:list->tail;
