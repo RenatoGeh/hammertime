@@ -9,8 +9,8 @@ void load();
 void update(int);
 
 void test() { 
-	static int i = 0;
-	printf("%d\n", ++i);
+	/*static int i = 0;
+	printf("%d\n", ++i);*/
 }
 
 int main(int argn, char ** args) {
