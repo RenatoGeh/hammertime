@@ -7,7 +7,7 @@ typedef struct ll LinkedList;
 typedef struct nd Node;
 
 struct nd {
-	Body *value;
+	void *value;
 	struct nd *next;
 	struct nd *prev;
 };
@@ -15,12 +15,12 @@ struct nd {
 struct ll {
 	Node *head, *tail;
 	unsigned int size;
-	void (*add)(LinkedList*, Body*);
-	int (*remove)(LinkedList*, Body*);
-	Body* (*get)(LinkedList*, int);
+	void (*add)(LinkedList*, void*);
+	int (*remove)(LinkedList*, void*);
+	void* (*get)(LinkedList*, int);
 };
 
-static void _list_add(LinkedList* list, Body* b) {
+static void _list_add(LinkedList* list, void* b) {
 	int n = list->size;
 
 	if(n>1) {
@@ -38,7 +38,7 @@ static void _list_add(LinkedList* list, Body* b) {
 	list->size++;
 }
 
-static int _list_remove(LinkedList* list, Body* b) {
+static int _list_remove(LinkedList* list, void* b) {
 	Node *n = list->head;
 
 	if(n->value==b) {
@@ -68,7 +68,7 @@ static int _list_remove(LinkedList* list, Body* b) {
 	return 0;
 }
 
-static Body* _list_get(LinkedList* list, int index) {
+static void* _list_get(LinkedList* list, int index) {
 	register int i, size = list->size;
 	int n = index<=size/2;
 	Node *head = n?list->head:list->tail;
@@ -89,9 +89,9 @@ LinkedList* newList() {
 	list->head->next = list->tail;
 	list->head->prev = NULL;
 
-	list->add = intern_add;
-	list->remove = intern_remove;
-	list->get = intern_get;
+	list->add = _list_add;
+	list->remove = _list_remove;
+	list->get = _list_get;
 
 	return list;
 }

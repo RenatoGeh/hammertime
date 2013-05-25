@@ -6,6 +6,7 @@
 #include <sys/time.h>
 #include "body.h"
 #include "awesometimer.h"
+#define print(args...); {printf(args); puts("");}
 
 void load();
 void update(int);
