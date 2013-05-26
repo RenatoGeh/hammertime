@@ -4,34 +4,34 @@
 
 struct bodystruct {
 	int x, y;
-	void (*draw)(struct bodystruct *, char[HEIGHT][WIDTH+1]);
+	void (*draw)(struct bodystruct *);
 	int (*debug)();
 };
 typedef struct bodystruct Body;
 
-Body* bodies[1000];
-int bsize = 0;
+LinkedList *bodies = NULL;
 
-void paintRectangle(Body *self, char terminal[HEIGHT][WIDTH+1]) {
+void paintRectangle(Body *self) {
 
 }
 
-void paintPoint(Body *self, char terminal[HEIGHT][WIDTH+1]) {
+void paintPoint(Body *self) {
 	paint(self->x, self->y, '*');
 }
 
 void registerBody(Body *b) {
-	bodies[bsize++] = b;
+	if(!bodies) bodies = newList();
+	bodies->add(bodies, b);
 }
 
 Body *newRectangle() {
-	Body *b = malloc(sizeof(Body));
+	Body *b = (Body*) malloc(sizeof(Body));
 	b->draw = paintRectangle;
 	return b;
 }
 
 Body *newPoint(int x, int y) {
-	Body *b = malloc(sizeof(Body));
+	Body *b = (Body*) malloc(sizeof(Body));
 	b->draw = paintPoint;
 	b->x = x;
 	b->y = y;

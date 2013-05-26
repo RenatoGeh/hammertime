@@ -1,15 +1,17 @@
 #ifndef HAMMERTIME
 #define HAMMERTIME
+#include <stdio.h>
+#include <sys/time.h>
 
 void load();
 void update(int);
 void paint(int,int,char);
+FILE *out = NULL;
 
 #include "env/env.h"
 #define WIDTH 80
 #define HEIGHT 23
-#include <stdio.h>
-#include <sys/time.h>
+#include "list.h"
 #include "body.h"
 #include "awesometimer.h"
 #define print(args...); {printf(args); puts("");}
@@ -33,10 +35,16 @@ void paint(int x, int y, char c) {
 
 void drawIntern() { 
 	static int i;
+	Node *n = NULL;
+	Body *b = NULL;
 
 	clearterm();
-	for(i=0; i<bsize; i++)
-		bodies[i]->draw(bodies[i], terminal);
+	n = (Node*) bodies->head;
+	while(n) {
+		b = (Body*) n->value;
+		b->draw(b);
+		n = n->next;
+	}
 
 	for(i=0; i<HEIGHT; i++){
 		printf("%s", terminal[i]);
@@ -52,6 +60,8 @@ int main(int argn, char ** args) {
 	struct timeval *t1, *t2 = NULL, *temp = NULL;
 	int dt, i, j;
 	clearterm();
+
+	out = fopen("out.txt", "w");
 
 	refreshScreen();
 
