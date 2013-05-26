@@ -5,6 +5,7 @@
 struct bodystruct {
 	int x, y;
 	void (*draw)(struct bodystruct *, char[HEIGHT][WIDTH+1]);
+	int (*debug)();
 };
 typedef struct bodystruct Body;
 

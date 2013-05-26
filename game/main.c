@@ -4,7 +4,6 @@
 #include <stdlib.h>
 //#include <sys/ioctl.h>
 
-
 //struct winsize ws;
 
 void load() {
@@ -15,7 +14,7 @@ void load() {
 	register int i;
 	LinkedList *list = newList();
 	Body *b[5];
-	
+
 	for(i=0;i<5;i++) {
 		b[i] = newRectangle();
 		list->add(list, b[i]);
@@ -23,6 +22,8 @@ void load() {
 	}
 
 	for(i=0;i<5;i++) printf("TEEHEE: [%d]=%p\n", i, list->get(list, i));
+
+	printf("[%d, %d]\n", getConsoleWidth(), getConsoleHeight());
 }
 
 void update(int dt) {

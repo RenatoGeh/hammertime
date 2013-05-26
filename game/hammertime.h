@@ -1,5 +1,7 @@
 #ifndef HAMMERTIME
 #define HAMMERTIME
+
+#include "env/env.h"
 #define WIDTH 80
 #define HEIGHT 23
 #include <stdio.h>
@@ -25,7 +27,7 @@ void clearterm() {
 void drawIntern() { 
 	static int i;
 	printf("\n");
-	system("clear");
+	system(CLEAR);
 	for(i=0; i<HEIGHT; i++){
 		printf("%s\n", terminal[i]);
 	}
@@ -44,6 +46,8 @@ int main(int argn, char ** args) {
 	struct timeval *t1, *t2 = NULL, *temp = NULL;
 	int dt, i, j;
 	clearterm();
+
+	refreshScreen();
 
 	load(argn, args);
 	t1 = malloc(sizeof(struct timeval));
