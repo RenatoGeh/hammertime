@@ -1,6 +1,6 @@
 #ifndef AWESOMETIMER
 #define AWESOMETIMER
-#include "stdlib.h"
+#include <stdlib.h>
 
 struct AwesomeTimerStruct {
 	void (*func)(void);

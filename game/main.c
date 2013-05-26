@@ -3,10 +3,10 @@
 #include <stdlib.h>
 
 void load() {
-	Body *b = newRectangle();
-	b->draw();
+	registerBody(newPoint(20,10));
+	registerBody(newText(10,12,"hey, dude. I'm making text!"));
 }
 
 void update(int dt) {
-	
+
 }
