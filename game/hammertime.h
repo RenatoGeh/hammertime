@@ -2,15 +2,18 @@
 #define HAMMERTIME
 #include <stdio.h>
 #include <sys/time.h>
+#include <string.h>
 
 void load();
 void update(int);
 void paint(int,int,char);
 FILE *out = NULL;
-
-#include "env/env.h"
 #define WIDTH 80
 #define HEIGHT 23
+#define max(a,b) (a>b?a:b)
+#define min(a,b) (a<b?a:b)
+
+#include "env/env.h"
 #include "list.h"
 #include "body.h"
 #include "awesometimer.h"

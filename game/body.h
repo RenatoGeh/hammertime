@@ -5,7 +5,7 @@
 typedef struct bodystruct Body;
 
 struct bodystruct {
-	int x, y;
+	int x, y, w, h;
 	void (*draw)(Body *);
 	int (*debug)();
 };
@@ -26,10 +26,11 @@ void paintPoint(Body *self) {
 }
 
 void paintText(Body *self) {
-	int a = self->x;
+	static int i, j;
 	char *t = ((Text*)self)->text;
-	while(*t) 
-		paint(a++, self->y, *t++);
+	for(i = 0; i < self->h && *t; i++)
+		for(j = 0; j < self->w && *t; j++)
+			paint(self->x + j, self->y + i, *t++);
 }
 
 void registerBody(Body *b) {
@@ -38,9 +39,9 @@ void registerBody(Body *b) {
 }
 
 Body *newRectangle() {
-	Body *b = (Body*) malloc(sizeof(Body));
+	/*Body *b = (Body*) malloc(sizeof(Body));
 	b->draw = paintRectangle;
-	return b;
+	return b; TODO*/
 }
 
 Body *newPoint(int x, int y) {
@@ -48,10 +49,12 @@ Body *newPoint(int x, int y) {
 	b->draw = paintPoint;
 	b->x = x;
 	b->y = y;
+	b->w = 1;
+	b->h = 1;
 	return b;
 }
 
-Body *newText(int x, int y, char *text) {
+Body *newText(int x, int y, char *text, int wrap) { //wrap = -1 -> never wrap, wrap = 0 -> wrap only on screen end, wrap>0 warp every wrap chars
 	Text *t = (Text*) malloc(sizeof(Text));
 	Body *b = NULL;
 	t->text = text;
@@ -59,6 +62,9 @@ Body *newText(int x, int y, char *text) {
 	b->draw = paintText;
 	b->x = x;
 	b->y = y;
+	b->w = wrap? (wrap>0? min(strlen(text),wrap) : strlen(text)) : min(strlen(text), WIDTH - x);
+	b->h =  (strlen(text) + (b->w - 1)) / b->w; //rounding up
+	fprintf(out, "%s: %d\t%d\n", text, b->w, b->h);
 	return b;
 }
 
