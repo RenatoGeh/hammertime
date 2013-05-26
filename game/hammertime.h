@@ -1,6 +1,10 @@
 #ifndef HAMMERTIME
 #define HAMMERTIME
 
+void load();
+void update(int);
+void paint(int,int,char);
+
 #include "env/env.h"
 #define WIDTH 80
 #define HEIGHT 23
@@ -9,9 +13,6 @@
 #include "body.h"
 #include "awesometimer.h"
 #define print(args...); {printf(args); puts("");}
-
-void load();
-void update(int);
 
 char terminal[HEIGHT][WIDTH+1];
 
@@ -22,24 +23,29 @@ void clearterm() {
 			terminal[i][j] = ' ';
 		terminal[i][WIDTH] = '\0';
 	}
+	system(CLEAR);
+}
+
+void paint(int x, int y, char c) {
+	if(y<0 || y>=HEIGHT || x<0 || x>=WIDTH) return;
+	terminal[y][x] = c; //x and y are flipped
 }
 
 void drawIntern() { 
 	static int i;
-	printf("\n");
-	system(CLEAR);
+
+	clearterm();
+	for(i=0; i<bsize; i++)
+		bodies[i]->draw(bodies[i], terminal);
+
 	for(i=0; i<HEIGHT; i++){
-		printf("%s\n", terminal[i]);
+		printf("%s", terminal[i]);
 	}
 }
 
 void updateIntern(int dt) {
-	static int i;
 	updateTimers(dt);
-	clearterm();
 	update(dt);
-	for(i=0; i<bsize; i++)
-		bodies[i]->draw(bodies[i], terminal);
 }
 
 int main(int argn, char ** args) {
@@ -53,13 +59,14 @@ int main(int argn, char ** args) {
 	t1 = malloc(sizeof(struct timeval));
 	t2 = malloc(sizeof(struct timeval));
 	registerTimer(newAwesomeTimer(1000, drawIntern));
+	drawIntern();
 	gettimeofday(t1, NULL);
 	while(1) {
 		do {
 			gettimeofday(t2, NULL);
 			dt = ((t2->tv_usec/1000 + 1000 *t2->tv_sec) - (t1->tv_usec/1000 + 1000*t1->tv_sec));
 		}while(dt == 0);
-		update(dt);
+		updateIntern(dt);
 		temp = t1;
 		t1 = t2;
 		t2 = temp;

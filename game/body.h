@@ -17,7 +17,7 @@ void paintRectangle(Body *self, char terminal[HEIGHT][WIDTH+1]) {
 }
 
 void paintPoint(Body *self, char terminal[HEIGHT][WIDTH+1]) {
-	terminal[self->x][self->y] = '*';
+	paint(self->x, self->y, '*');
 }
 
 void registerBody(Body *b) {
