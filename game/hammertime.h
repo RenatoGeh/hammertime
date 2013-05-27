@@ -8,8 +8,6 @@ void load();
 void update(int);
 void paint(int,int,char);
 FILE *out = NULL;
-#define WIDTH 80
-#define HEIGHT 23
 #define max(a,b) (a>b?a:b)
 #define min(a,b) (a<b?a:b)
 
@@ -19,25 +17,23 @@ FILE *out = NULL;
 #include "awesometimer.h"
 #define print(args...); {printf(args); puts("");}
 
-char terminal[HEIGHT][WIDTH+1];
+char *terminal = NULL;
 
 void clearterm() {
-	static int i, j;
-	for(i=0; i<HEIGHT; i++) {
-		for(j=0; j<WIDTH; j++)
-			terminal[i][j] = ' ';
-		terminal[i][WIDTH] = '\0';
+	int i, m = screen.width * screen.height;
+	for(i = 0; i < m; i++) {
+		*(terminal + i) = ' ';
 	}
 	system(CLEAR);
 }
 
 void paint(int x, int y, char c) {
-	if(y<0 || y>=HEIGHT || x<0 || x>=WIDTH) return;
-	terminal[y][x] = c; //x and y are flipped
+	if(y < 0 || y >= screen.height || x < 0 || x >= screen.width) return;
+	*(terminal + y * screen.width + x) = c; //x and y are flipped
 }
 
 void drawIntern() { 
-	static int i;
+	int i, m = screen.width * screen.height;
 	Node *n = NULL;
 	Body *b = NULL;
 
@@ -49,8 +45,8 @@ void drawIntern() {
 		n = n->next;
 	}
 
-	for(i=0; i<HEIGHT; i++){
-		printf("%s", terminal[i]);
+	for(i = 0; i < m; i++){
+		printf("%c", *(terminal + i));
 	}
 }
 
@@ -62,11 +58,13 @@ void updateIntern(int dt) {
 int main(int argn, char ** args) {
 	struct timeval *t1, *t2 = NULL, *temp = NULL;
 	int dt, i, j;
-	clearterm();
-
 	out = fopen("out.txt", "w");
 
 	refreshScreen();
+	screen.height--;
+	terminal = (char*) malloc(sizeof(char) * screen.width * screen.height);
+	clearterm();
+	initBodies();
 
 	load(argn, args);
 	t1 = malloc(sizeof(struct timeval));

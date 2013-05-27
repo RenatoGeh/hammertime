@@ -26,7 +26,7 @@ void paintPoint(Body *self) {
 }
 
 void paintText(Body *self) {
-	static int i, j;
+	int i, j;
 	char *t = ((Text*)self)->text;
 	for(i = 0; i < self->h && *t; i++)
 		for(j = 0; j < self->w && *t; j++)
@@ -34,8 +34,11 @@ void paintText(Body *self) {
 }
 
 void registerBody(Body *b) {
-	if(!bodies) bodies = newList();
 	bodies->add(bodies, b);
+}
+
+void initBodies() {
+	bodies = newList();
 }
 
 Body *newRectangle() {
@@ -62,9 +65,8 @@ Body *newText(int x, int y, char *text, int wrap) { //wrap = -1 -> never wrap, w
 	b->draw = paintText;
 	b->x = x;
 	b->y = y;
-	b->w = wrap? (wrap>0? min(strlen(text),wrap) : strlen(text)) : min(strlen(text), WIDTH - x);
+	b->w = wrap? (wrap>0? min(strlen(text),wrap) : strlen(text)) : min(strlen(text), screen.width - x);
 	b->h =  (strlen(text) + (b->w - 1)) / b->w; //rounding up
-	fprintf(out, "%s: %d\t%d\n", text, b->w, b->h);
 	return b;
 }
 

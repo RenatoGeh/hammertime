@@ -26,7 +26,7 @@ void registerTimer(AwesomeTimer *at) {
 }
 
 AwesomeTimer *newAwesomeTimer(int timeToCall, void (*funcToCall)(void)) {
-	AwesomeTimer *at = malloc(sizeof(AwesomeTimer));
+	AwesomeTimer *at = (AwesomeTimer*) malloc(sizeof(AwesomeTimer));
 	at->currentTime = 0;
 	at->func = funcToCall;
 	at->timeToSet = timeToCall;
