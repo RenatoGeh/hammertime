@@ -37,7 +37,7 @@ void paintRectangle(Body *self) {
 }
 
 void paintPoint(Body *self) {
-	paint(self->x, self->y, '*');
+	paint(self->x, self->y, self->c);
 }
 
 void paintText(Body *self) {
@@ -48,20 +48,33 @@ void paintText(Body *self) {
 			paint(self->x + j, self->y + i, *t++);
 }
 
-void registerBody(Body *b) {
-	bodies->add(bodies, b);
+int registerBody(Body *b) {
+	return bodies->add(bodies, b);
+}
+
+void killBody(Body *b) {
+	Node *n = bodies->head;
+	while(n) {
+		if(n->value == b) {
+			removeNode(n);
+			break;
+		}
+		n = n->next;
+	}
+	free(b);
 }
 
 void initBodies() {
 	bodies = newList();
 }
-Body *newPoint(int x, int y) {
+Body *newPoint(int x, int y, char c) {
 	Body *b = (Body*) malloc(sizeof(Body));
 	b->draw = paintPoint;
 	b->x = x;
 	b->y = y;
 	b->w = 1;
 	b->h = 1;
+	b->c = c;
 	return b;
 }
 

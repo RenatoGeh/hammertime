@@ -15,7 +15,7 @@ struct nd {
 struct ll {
 	Node *head, *tail;
 	unsigned size;
-	void (*add)(LinkedList*, void*);
+	int (*add)(LinkedList*, void*);
 	void* (*remove)(LinkedList*, int);
 	void* (*get)(LinkedList*, int);
 	Node* (*getNode)(LinkedList*, int);
@@ -33,14 +33,14 @@ static Node *_list_getNode(LinkedList *list, int index) {
 	return n;
 }
 
-static void _list_add(LinkedList* list, void* b) {
+static int _list_add(LinkedList* list, void* b) {
 	int n = list->size;
 
 	if(n>1) {
 		list->tail->next = (Node*)malloc(sizeof(Node));
 		list->tail->next->value = b;
-		list->tail->next->next = NULL;
 		list->tail->next->prev = list->tail;
+		list->tail->next->next = NULL;
 
 		list->tail = list->tail->next;
 	} else {
@@ -59,7 +59,7 @@ static void _list_add(LinkedList* list, void* b) {
 		}
 	}
 
-	list->size++;
+	return list->size++;
 }
 
 void *removeNode(Node *n) {
@@ -78,6 +78,7 @@ void *removeNode(Node *n) {
 }
 
 static void *_list_remove(LinkedList* list, int index) {
+	list->size--;
 	return removeNode(_list_getNode(list, index));
 }
 

@@ -4,8 +4,7 @@
 #include <sys/time.h>
 #include <string.h>
 
-void load();
-void update(int);
+int load();
 void paint(int,int,char);
 FILE *out = NULL;
 #define max(a,b) (a>b?a:b)
@@ -33,7 +32,7 @@ void paint(int x, int y, char c) {
 	terminal[y * screen.width + x] = c; //x and y are flipped
 }
 
-void drawIntern() { 
+void draw() { 
 	int i, m = screen.width * screen.height;
 	Node *n = NULL;
 	Body *b = NULL;
@@ -52,10 +51,10 @@ void drawIntern() {
 	fflush(stdout);
 }
 
-void updateIntern(int dt) {
+/*void updateIntern(int dt) {
 	updateTimers(dt);
 	update(dt);
-}
+}*/
 
 int main(int argn, char ** args) {
 	struct timeval *t1, *t2 = NULL, *temp = NULL;
@@ -65,14 +64,12 @@ int main(int argn, char ** args) {
 	refreshScreen();
 	screen.height--;
 	terminal = (char*) malloc(sizeof(char) * screen.width * screen.height);
-	clearterm();
 	initBodies();
 
-	load(argn, args);
+	return load(argn, args);/*
 	t1 = malloc(sizeof(struct timeval));
 	t2 = malloc(sizeof(struct timeval));
-	registerTimer(newAwesomeTimer(1000, drawIntern));
-	drawIntern();
+	draw();
 	gettimeofday(t1, NULL);
 	while(1) {
 		do {
@@ -83,7 +80,7 @@ int main(int argn, char ** args) {
 		temp = t1;
 		t1 = t2;
 		t2 = temp;
-	}
+	}*/
 }
 
 #endif
