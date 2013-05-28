@@ -6,6 +6,7 @@ typedef struct bodystruct Body;
 
 struct bodystruct {
 	int x, y, w, h;
+	char c;
 	void (*draw)(Body *);
 	int (*debug)();
 };
@@ -18,7 +19,10 @@ typedef struct {
 LinkedList *bodies = NULL;
 
 void paintRectangle(Body *self) {
-
+	int i,j;
+	for(i = self->x; i < i+self->w ; i++)
+		for(j = self->y; j< j+self->h; j++)
+			paint(i,j,self->c);
 }
 
 void paintPoint(Body *self) {
@@ -40,13 +44,6 @@ void registerBody(Body *b) {
 void initBodies() {
 	bodies = newList();
 }
-
-Body *newRectangle() {
-	/*Body *b = (Body*) malloc(sizeof(Body));
-	b->draw = paintRectangle;
-	return b; TODO*/
-}
-
 Body *newPoint(int x, int y) {
 	Body *b = (Body*) malloc(sizeof(Body));
 	b->draw = paintPoint;
@@ -70,4 +67,14 @@ Body *newText(int x, int y, char *text, int wrap) { //wrap = -1 -> never wrap, w
 	return b;
 }
 
+Body *newRectangle(int x, int y, int h, int w, char c){
+	Body *b = (Body*) malloc(sizeof(Body));
+	b->draw = paintRectangle;
+	b->x = x;
+	b->y = y;
+	b->w = w;
+	b->h = h;
+	b->c = c;
+	return b;
+}
 #endif
