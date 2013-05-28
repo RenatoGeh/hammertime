@@ -94,6 +94,24 @@ void clearBodies() {
 	bodies->size = 0;
 }
 
+void paintLine(Body *self) {
+	int i;
+	int x=self->x, y=self->y;
+	int w=self->w, h=self->h;
+	char c=self->c;
+
+	if(h==0) //vertical
+		for(i=0;i<w;i++)
+			paint(x+i, y, c);
+	else		//horizontal
+		for(i=0;i<h;i++)
+			paint(x, y+i, c);
+}
+
+void registerBody(Body *b) {
+	bodies->add(bodies, b);
+}
+
 void initBodies() {
 	bodies = newList();
 }
@@ -145,4 +163,21 @@ Body *newCircle(int x, int y, int r, char c, char mode){
 	b->mode = mode;
 	return b;
 }
+
+Body *newLine(int x, int y, int size, char dir, char c) {
+	Body *b = (Body*)malloc(sizeof(Body));
+	b->x = x;
+	b->y = y;
+	if(dir=='h') {
+		b->w=size;
+		b->h=0;
+	} else {
+		b->h=size;
+		b->w=0;
+	}
+	b->c = c;
+	b->draw = paintLine;
+	return b;
+}
+
 #endif
