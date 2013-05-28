@@ -19,4 +19,6 @@ int load() {
 	killBody(greeting);
 	registerBody(newText(10, 12, strcat(strcat(hey , name), "."), 30));
 	draw();
+	registerBody(newRectangle(20,18,4,5,'*','l'));
+	registerBody(newCircle(0,0,4,'*'));
 }

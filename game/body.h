@@ -19,23 +19,29 @@ typedef struct {
 LinkedList *bodies = NULL;
 
 void paintRectangle(Body *self) {
-	int i, j, l = self->x, s = self->y;
+	int i, j, x = self->x, y = self->y;
 	if(self->mode == 'f')                    // Modo Fill
-		for(i = l; i < l + self->w ; i++)
-			for(j = s; j < s + self->h; j++)
+		for(i = x; i < x + self->w ; i++)
+			for(j = y; j < y + self->h; j++)
 				paint(i,j,self->c);
 	else                                 //Modo Line
-		for(j = s; j < s + self->h; j++)
-			if(j == s || j == (s + self->h - 1))  //Se for primeira ou ultima linha
-				for(i = l; i < l + self->w ; i++)
+		for(j = y; j < y + self->h; j++)
+			if(j == y || j == (y + self->h - 1))  //Se for primeira ou ultima linha
+				for(i = x; i < x + self->w ; i++)
 					paint(i,j,self->c);
 			else{
-				paint(l,j,self->c);
-				paint((l + self->w - 1),j,self->c);
+				paint(x,j,self->c);
+				paint((x + self->w - 1),j,self->c);
 			}
 
 }
-
+void paintCircle(Body *self) {
+	int i, j, x = self->x, y = self->y,r = self->w;
+	for(i = (x - r + 1); i < (x + r); i++)
+		for (j = (y - r + 1); j < (y + r ); j++)
+			if( ( (i-x) * (i-x) ) + ( (j-y) * (j-y) ) < r*r)
+				paint(i,j,self->c);
+}
 void paintPoint(Body *self) {
 	paint(self->x, self->y, self->c);
 }
@@ -100,6 +106,16 @@ Body *newRectangle(int x, int y, int h, int w, char c,char mode){
 	b->h = h;
 	b->c = c;
 	b->mode = mode;
+	return b;
+}
+Body *newCircle(int x, int y, int r, char c){
+	Body *b = (Body*) malloc(sizeof(Body));
+	b->draw = paintCircle;
+	b->x = x;
+	b->y = y;
+	b->w = r;
+	b->h = b->w;
+	b->c = c;
 	return b;
 }
 #endif
