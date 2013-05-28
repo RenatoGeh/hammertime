@@ -8,8 +8,8 @@ static struct winsize envscreen;
 
 void refreshScreen() {
 	ioctl(STDOUT_FILENO, TIOCGWINSZ, &envscreen);
-	screen.width = envscreen.ws_row;
-	screen.height = envscreen.ws_col;
+	screen.width = envscreen.ws_col;
+	screen.height = envscreen.ws_row;
 }
 
 int getConsoleWidth() {return screen.width;}

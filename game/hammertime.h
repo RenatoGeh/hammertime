@@ -21,15 +21,16 @@ char *terminal = NULL;
 
 void clearterm() {
 	int i, m = screen.width * screen.height;
-	for(i = 0; i < m; i++) {
-		*(terminal + i) = ' ';
-	}
+	fflush(stdout);
 	system(CLEAR);
+	for(i = 0; i < m; i++) {
+		terminal[i] = ' ';
+	}
 }
 
 void paint(int x, int y, char c) {
 	if(y < 0 || y >= screen.height || x < 0 || x >= screen.width) return;
-	*(terminal + y * screen.width + x) = c; //x and y are flipped
+	terminal[y * screen.width + x] = c; //x and y are flipped
 }
 
 void drawIntern() { 
@@ -46,8 +47,9 @@ void drawIntern() {
 	}
 
 	for(i = 0; i < m; i++){
-		printf("%c", *(terminal + i));
+		printf("%c", terminal[i]);
 	}
+	fflush(stdout);
 }
 
 void updateIntern(int dt) {
