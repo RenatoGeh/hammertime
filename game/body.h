@@ -6,7 +6,7 @@ typedef struct bodystruct Body;
 
 struct bodystruct {
 	int x, y, w, h;
-	char c,mode;
+	char c, mode;
 	void (*draw)(Body *);
 	int (*debug)();
 };
@@ -63,6 +63,10 @@ void paintText(Body *self) {
 			paint(self->x + j, self->y + i, *t++);
 }
 
+void clearBody(Body *b) {
+	free(b);
+}
+
 int registerBody(Body *b) {
 	return bodies->add(bodies, b);
 }
@@ -79,33 +83,30 @@ void killBody(Body *b) {
 		}
 		n = n->next;
 	}
-	free(b);
+	clearBody(b);
 }
 
 void clearBodies() {
 	Node *n = bodies->head;
-	if(!n) return;
-	while(n->next) {
-		free(removeNode(n->next));
-	}
-	free(removeNode(n));
 	bodies->head = NULL;
 	bodies->tail = NULL;
+	if(!n) return;
+	while(n->next) {
+		clearBody(removeNode(n->next));
+	}
+
+	clearBody(removeNode(n));
 	bodies->size = 0;
 }
 
 void paintLine(Body *self) {
 	int i;
-	int x=self->x, y=self->y;
-	int w=self->w, h=self->h;
-	char c=self->c;
-
-	if(h==0) //vertical
-		for(i=0;i<w;i++)
-			paint(x+i, y, c);
+	if(self->h == 0) //vertical
+		for(i = 0; i < self->w; i++)
+			paint(self->x + i, self->y, self->c);
 	else		//horizontal
-		for(i=0;i<h;i++)
-			paint(x, y+i, c);
+		for(i = 0; i < self->h; i++)
+			paint(self->x, self->y + i, self->c);
 }
 
 void initBodies() {
@@ -117,8 +118,7 @@ Body *newPoint(int x, int y, char c) {
 	b->draw = paintPoint;
 	b->x = x;
 	b->y = y;
-	b->w = 1;
-	b->h = 1;
+	b->w = b->h = 1;
 	b->c = c;
 	return b;
 }
@@ -153,23 +153,22 @@ Body *newCircle(int x, int y, int r, char c, char mode){
 	b->draw = paintCircle;
 	b->x = x;
 	b->y = y;
-	b->w = r;
-	b->h = b->w;
+	b->h = b->w = r;
 	b->c = c;
 	b->mode = mode;
 	return b;
 }
 
 Body *newLine(int x, int y, int size, char dir, char c) {
-	Body *b = (Body*)malloc(sizeof(Body));
+	Body *b = (Body*) malloc(sizeof(Body));
 	b->x = x;
 	b->y = y;
 	if(dir=='h') {
-		b->w=size;
-		b->h=0;
+		b->w = size;
+		b->h = 0;
 	} else {
-		b->h=size;
-		b->w=0;
+		b->h = size;
+		b->w = 0;
 	}
 	b->c = c;
 	b->draw = paintLine;

@@ -4,16 +4,14 @@
 #include <sys/time.h>
 #include <string.h>
 
-int load();
+int run();
 void paint(int,int,char);
-FILE *out = NULL;
 #define max(a,b) (a>b?a:b)
 #define min(a,b) (a<b?a:b)
 
 #include "env/env.h"
 #include "list.h"
 #include "body.h"
-#include "awesometimer.h"
 #define print(args...); {printf(args); puts("");}
 
 char *terminal = NULL;
@@ -29,6 +27,7 @@ void clearterm() {
 
 void clearAndRefresh() {
 	refreshScreen();
+	free(terminal);
 	terminal = (char*) malloc(sizeof(char) * screen.width * screen.height);
 	clearterm();
 }
@@ -57,35 +56,24 @@ void draw() {
 	fflush(stdout);
 }
 
-/*void updateIntern(int dt) {
-	updateTimers(dt);
-	update(dt);
-}*/
+void closeAll() {
+	free(terminal);
+	clearBodies();
+	free(bodies);
+}
 
 int main(int argn, char ** args) {
-	struct timeval *t1, *t2 = NULL, *temp = NULL;
-	int dt, i, j;
-	out = fopen("out.txt", "w");
+	int ret;
 
 	clearAndRefresh();
 	
 	initBodies();
 
-	return load(argn, args);/*
-	t1 = malloc(sizeof(struct timeval));
-	t2 = malloc(sizeof(struct timeval));
-	draw();
-	gettimeofday(t1, NULL);
-	while(1) {
-		do {
-			gettimeofday(t2, NULL);
-			dt = ((t2->tv_usec/1000 + 1000 *t2->tv_sec) - (t1->tv_usec/1000 + 1000*t1->tv_sec));
-		}while(dt == 0);
-		updateIntern(dt);
-		temp = t1;
-		t1 = t2;
-		t2 = temp;
-	}*/
+	ret = run(argn, args);
+
+	closeAll();
+
+	return ret;
 }
 
 #endif
