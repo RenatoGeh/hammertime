@@ -108,10 +108,6 @@ void paintLine(Body *self) {
 			paint(x, y+i, c);
 }
 
-void registerBody(Body *b) {
-	bodies->add(bodies, b);
-}
-
 void initBodies() {
 	bodies = newList();
 }
