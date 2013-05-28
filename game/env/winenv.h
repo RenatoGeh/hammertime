@@ -8,7 +8,7 @@ static CONSOLE_SCREEN_BUFFER_INFO winscreen;
 void refreshScreen() {
 	GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &winscreen);
 	screen.width = winscreen.srWindow.Right - winscreen.srWindow.Left + 1;
-	screen.height = winscreen.srWindow.Bottom - winscreen.srWindow.Top + 1;
+	screen.height = winscreen.srWindow.Bottom - winscreen.srWindow.Top;
 }
 
 void setConsoleSize(int width, int height) {
