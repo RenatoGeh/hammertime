@@ -35,6 +35,7 @@ void paintRectangle(Body *self) {
 			}
 
 }
+
 void paintCircle(Body *self) {
 	int i, j, x = self->x, y = self->y, r = self->w - 1;
 	if(self->mode == 'f'){
@@ -49,6 +50,7 @@ void paintCircle(Body *self) {
 				if( (( (i-x) * (i-x) ) + ( (j-y) * (j-y) ) >= r*r-2) && (( (i-x) * (i-x) ) + ( (j-y) * (j-y) ) <= r*r))
 					paint(i,j,self->c);
 }
+
 void paintPoint(Body *self) {
 	paint(self->x, self->y, self->c);
 }
@@ -69,7 +71,10 @@ void killBody(Body *b) {
 	Node *n = bodies->head;
 	while(n) {
 		if(n->value == b) {
+			if(n==bodies->tail) bodies->tail = n->prev;
+			if(n==bodies->head) bodies->head = n->next;
 			removeNode(n);
+			bodies->size--;
 			break;
 		}
 		n = n->next;
@@ -77,9 +82,22 @@ void killBody(Body *b) {
 	free(b);
 }
 
+void clearBodies() {
+	Node *n = bodies->head;
+	if(!n) return;
+	while(n->next) {
+		free(removeNode(n->next));
+	}
+	free(removeNode(n));
+	bodies->head = NULL;
+	bodies->tail = NULL;
+	bodies->size = 0;
+}
+
 void initBodies() {
 	bodies = newList();
 }
+
 Body *newPoint(int x, int y, char c) {
 	Body *b = (Body*) malloc(sizeof(Body));
 	b->draw = paintPoint;
@@ -115,6 +133,7 @@ Body *newRectangle(int x, int y, int h, int w, char c,char mode){
 	b->mode = mode;
 	return b;
 }
+
 Body *newCircle(int x, int y, int r, char c, char mode){
 	Body *b = (Body*) malloc(sizeof(Body));
 	b->draw = paintCircle;

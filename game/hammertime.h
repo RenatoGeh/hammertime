@@ -27,6 +27,12 @@ void clearterm() {
 	}
 }
 
+void clearAndRefresh() {
+	refreshScreen();
+	terminal = (char*) malloc(sizeof(char) * screen.width * screen.height);
+	clearterm();
+}
+
 void paint(int x, int y, char c) {
 	if(y < 0 || y >= screen.height || x < 0 || x >= screen.width) return;
 	terminal[y * screen.width + x] = c; //x and y are flipped
@@ -61,9 +67,8 @@ int main(int argn, char ** args) {
 	int dt, i, j;
 	out = fopen("out.txt", "w");
 
-	refreshScreen();
-	screen.height--;
-	terminal = (char*) malloc(sizeof(char) * screen.width * screen.height);
+	clearAndRefresh();
+	
 	initBodies();
 
 	return load(argn, args);/*
