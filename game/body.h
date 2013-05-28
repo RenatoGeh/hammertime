@@ -6,7 +6,7 @@ typedef struct bodystruct Body;
 
 struct bodystruct {
 	int x, y, w, h;
-	char c;
+	char c,mode;
 	void (*draw)(Body *);
 	int (*debug)();
 };
@@ -19,10 +19,21 @@ typedef struct {
 LinkedList *bodies = NULL;
 
 void paintRectangle(Body *self) {
-	int i,j;
-	for(i = self->x; i < i+self->w ; i++)
-		for(j = self->y; j< j+self->h; j++)
-			paint(i,j,self->c);
+	int i, j, l = self->x, s = self->y;
+	if(self->mode == 'f')                    // Modo Fill
+		for(i = l; i < l + self->w ; i++)
+			for(j = s; j < s + self->h; j++)
+				paint(i,j,self->c);
+	else                                 //Modo Line
+		for(j = s; j < s + self->h; j++)
+			if(j == s || j == (s + self->h - 1))  //Se for primeira ou ultima linha
+				for(i = l; i < l + self->w ; i++)
+					paint(i,j,self->c);
+			else{
+				paint(l,j,self->c);
+				paint((l + self->w - 1),j,self->c);
+			}
+
 }
 
 void paintPoint(Body *self) {
@@ -67,7 +78,7 @@ Body *newText(int x, int y, char *text, int wrap) { //wrap = -1 -> never wrap, w
 	return b;
 }
 
-Body *newRectangle(int x, int y, int h, int w, char c){
+Body *newRectangle(int x, int y, int h, int w, char c,char mode){
 	Body *b = (Body*) malloc(sizeof(Body));
 	b->draw = paintRectangle;
 	b->x = x;
@@ -75,6 +86,7 @@ Body *newRectangle(int x, int y, int h, int w, char c){
 	b->w = w;
 	b->h = h;
 	b->c = c;
+	b->mode = mode;
 	return b;
 }
 #endif
