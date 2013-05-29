@@ -8,32 +8,31 @@ struct bodystruct {
 	int x, y, w, h;
 	char c, mode;
 	void (*draw)(Body *);
-	int (*debug)();
 };
 
 typedef struct {
 	Body base;
 	char *text;
-}Text;
+} Text;
 
 LinkedList *bodies = NULL;
 
 void paintRectangle(Body *self) {
 	int i, j, x = self->x, y = self->y;
+	int w=self->w, h=self->h;
 	if(self->mode == 'f')                    // Modo Fill
-		for(i = x; i < x + self->w ; i++)
-			for(j = y; j < y + self->h; j++)
+		for(i = x;i < x + w; i++)
+			for(j = y; j < y + h; j++)
 				paint(i,j,self->c);
 	else                                 //Modo Line
-		for(j = y; j < y + self->h; j++)
-			if(j == y || j == (y + self->h - 1))  //Se for primeira ou ultima linha
-				for(i = x; i < x + self->w ; i++)
+		for(j = y; j < y + h; j++)
+			if(j == y || j == (y + h - 1))  //Se for primeira ou ultima linha
+				for(i = x; i < x + w ; i++)
 					paint(i,j,self->c);
-			else{
+			else {
 				paint(x,j,self->c);
-				paint((x + self->w - 1),j,self->c);
+				paint((x + w - 1),j,self->c);
 			}
-
 }
 
 void paintCircle(Body *self) {
@@ -61,6 +60,19 @@ void paintText(Body *self) {
 	for(i = 0; i < self->h && *t; i++)
 		for(j = 0; j < self->w && *t; j++)
 			paint(self->x + j, self->y + i, *t++);
+}
+
+void paintTextBox(Body *self) {
+	self->w+=2;
+	self->h+=2;
+	self->x--;
+	self->y--;
+	paintRectangle(self);
+	self->w-=2;
+	self->h-=2;
+	self->x++;
+	self->y++;
+	paintText(self);
 }
 
 void clearBody(Body *b) {
@@ -172,6 +184,23 @@ Body *newLine(int x, int y, int size, char dir, char c) {
 	}
 	b->c = c;
 	b->draw = paintLine;
+	return b;
+}
+
+Body *newTextBox(int x, int y, char *text, int wrap, char c) {
+	Text *t = (Text*)malloc(sizeof(Text));
+	Body *b = (Body*)malloc(sizeof(Body));
+
+	t->text = text;
+	b = (Body*)t;
+	b->x = x;
+	b->y = y;
+	b->w = wrap?(wrap>0?min(strlen(text), wrap):strlen(text)):min(strlen(text), screen.width-x);
+	b->h = (strlen(text)+(b->w-1))/b->w;
+	b->mode='l';
+	b->c = c;
+	b->draw = paintTextBox;
+
 	return b;
 }
 
