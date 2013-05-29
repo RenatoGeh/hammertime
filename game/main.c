@@ -19,5 +19,15 @@ int run() {
 	registerBody(newTextBox(22, 10, "THAT'S WHAT SHE SAID", 1, '<'));
 	registerBody(newTextBox(30, 20, "Hey, Michael Scott is back!", 0, '='));
 	registerBody(newTextBox(40, 28, "feelings", -1, '#'));
+
+	Body *r = newRectangle(20, 40, 20, 5, '*', 'l');
+	Stroke *s = newStroke(1, newBorder(6, 'r', 'e', 'n', 'a', 't', 'o'));
+	r->addStroke(r, s);
+	registerBody(r);
+
+	Body *tb = newTextBox(55, 40, "BUT VARARGS ARE SO BEAUTIFUL!", 0, '!');
+	tb->addStroke(tb, newStroke(1, newBorder(8, 'v', 'a', 'r', 'a', 'r', 'g', 's', '!')));
+	registerBody(tb);
+
 	draw();
 }
