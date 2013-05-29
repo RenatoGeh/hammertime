@@ -1,14 +1,12 @@
 #ifndef STROKE
 #define STROKE
 
-#include <stdlib.h>
 #include <stdarg.h>
-#define BORDER_MAX 10
 
 typedef struct {
 	int size;
 	int index;
-	char border[BORDER_MAX];
+	char *border;
 } Border;
 
 typedef struct strokestruct Stroke;
@@ -86,17 +84,12 @@ Stroke *newStroke(int n, ...) {
 }
 
 /* Creates a new side-border with the given chars */
-Border *newBorder(int n, ...) {
-	Border *b = (Border*)malloc(sizeof(Border));
-	va_list args;
-	int i;
+Border *newBorder(char *str) {
+	Border *b = (Border*) malloc(sizeof(Border));
 
-	va_start(args, n);
-	b->size = n;
+	b->size = strlen(str);
 	b->index = 0;
-	for(i=0;i<n;i++)
-		b->border[i] = va_arg(args, int);
-	va_end(args);
+	b->border = str;
 
 	return b;
 }

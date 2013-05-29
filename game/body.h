@@ -23,7 +23,6 @@ LinkedList *bodies = NULL;
 
 void _body_addStroke(Body *b, Stroke *s) {
 	b->stroke = s;
-	printf("%p", b->stroke);
 	s->owner = &(b->c);
 	s->next(s);
 	s->prev(s);
@@ -154,18 +153,24 @@ void initBodies() {
 	bodies = newList();
 }
 
-Body *newPoint(int x, int y, char c) {
-	Body *b = (Body*) calloc(1, sizeof(Body));
-	b->draw = paintPoint;
+Body *_defBody(int x, int y, int w, int h, char c) {
+	Body *b = (Body*) malloc(sizeof(Body));
 	b->x = x;
 	b->y = y;
-	b->w = b->h = 1;
+	b->w = w;
+	b->h = h;
 	b->c = c;
 	return b;
 }
 
+Body *newPoint(int x, int y, char c) {
+	Body *b = _defBody(x, y, 1, 1, c);
+	b->draw = paintPoint;
+	return b;
+}
+
 Body *newText(int x, int y, char *text, int wrap) { //wrap = -1 -> never wrap, wrap = 0 -> wrap only on screen end, wrap>0 warp every wrap chars
-	Text *t = (Text*) calloc(1, sizeof(Text));
+	Text *t = (Text*) malloc(sizeof(Text));
 	Body *b = NULL;
 	t->text = text;
 	b = (Body*) t;
@@ -178,34 +183,23 @@ Body *newText(int x, int y, char *text, int wrap) { //wrap = -1 -> never wrap, w
 }
 
 Body *newRectangle(int x, int y, int w, int h, char c,char mode){
-	Body *b = (Body*) calloc(1, sizeof(Body));
+	Body *b = _defBody(x, y, w, h, c);
 	b->draw = paintRectangle;
-	b->x = x;
-	b->y = y;
-	b->w = w;
-	b->h = h;
-	b->c = c;
 	b->mode = mode;
 	b->addStroke = _body_addStroke;
 	return b;
 }
 
 Body *newCircle(int x, int y, int r, char c, char mode){
-	Body *b = (Body*) calloc(1, sizeof(Body));
+	Body *b = _defBody(x, y, r, r, c);
 	b->draw = paintCircle;
-	b->x = x;
-	b->y = y;
-	b->h = b->w = r;
-	b->c = c;
 	b->addStroke = _body_addStroke;
 	b->mode = mode;
 	return b;
 }
 
 Body *newLine(int x, int y, int size, char dir, char c) {
-	Body *b = (Body*) calloc(1, sizeof(Body));
-	b->x = x;
-	b->y = y;
+	Body *b = _defBody(x, y, 0, 0, c);
 	if(dir=='h') {
 		b->w = size;
 		b->h = 0;
@@ -213,15 +207,14 @@ Body *newLine(int x, int y, int size, char dir, char c) {
 		b->h = size;
 		b->w = 0;
 	}
-	b->c = c;
 	b->draw = paintLine;
 	b->addStroke = _body_addStroke;
 	return b;
 }
 
 Body *newTextBox(int x, int y, char *text, int wrap, char c) {
-	Text *t = (Text*)calloc(1, sizeof(Text));
-	Body *b = (Body*)calloc(1, sizeof(Body));
+	Text *t = (Text*)malloc(sizeof(Text));
+	Body *b = NULL;
 
 	t->text = text;
 	b = (Body*)t;

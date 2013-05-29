@@ -21,12 +21,12 @@ int run() {
 	registerBody(newTextBox(40, 28, "feelings", -1, '#'));
 
 	Body *r = newRectangle(20, 40, 20, 5, '*', 'l');
-	Stroke *s = newStroke(1, newBorder(6, 'r', 'e', 'n', 'a', 't', 'o'));
+	Stroke *s = newStroke(1, newBorder("renatofag"));
 	r->addStroke(r, s);
 	registerBody(r);
 
 	Body *tb = newTextBox(55, 40, "BUT VARARGS ARE SO BEAUTIFUL!", 0, '!');
-	tb->addStroke(tb, newStroke(1, newBorder(8, 'v', 'a', 'r', 'a', 'r', 'g', 's', '!')));
+	tb->addStroke(tb, newStroke(1, newBorder("varargssuck")));
 	registerBody(tb);
 
 	draw();
