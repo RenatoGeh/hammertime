@@ -8,7 +8,7 @@ typedef struct bodystruct Body;
 
 struct bodystruct {
 	int x, y, w, h;
-	char c, mode;
+	char c, mode, *name;
 	Stroke *stroke;
 	void (*draw)(Body *);
 	void (*addStroke)(Body*, Stroke *s);
@@ -102,7 +102,8 @@ void clearBody(Body *b) {
 	free(b);
 }
 
-int registerBody(Body *b) {
+int registerBody(char *name, Body *b) {
+	b->name = name;
 	return bodies->add(bodies, b);
 }
 
@@ -119,6 +120,30 @@ void killBody(Body *b) {
 		n = n->next;
 	}
 	clearBody(b);
+}
+
+void killByName(char *name) {
+	Node *n = bodies->head;
+	while(n) {
+		if(strcmp(name, ((Body*)n->value)->name) == 0) {
+			if(n==bodies->tail) bodies->tail = n->prev;
+			if(n==bodies->head) bodies->head = n->next;
+			clearBody(removeNode(n));
+			bodies->size--;
+			break;
+		}
+		n = n->next;
+	}
+}
+
+Body *getByName(char *name) {
+	Node *n = bodies->head;
+	while(n) {
+		if(strcmp(name, ((Body*)n->value)->name) == 0)
+			return n->value;
+		n = n->next;
+	}
+	return NULL;
 }
 
 void clearBodies() {
@@ -160,6 +185,7 @@ Body *_defBody(int x, int y, int w, int h, char c) {
 	b->w = w;
 	b->h = h;
 	b->c = c;
+	b->name = NULL;
 	return b;
 }
 
@@ -179,6 +205,7 @@ Body *newText(int x, int y, char *text, int wrap) { //wrap = -1 -> never wrap, w
 	b->y = y;
 	b->w = wrap? (wrap>0? min(strlen(text),wrap) : strlen(text)) : min(strlen(text), screen.width - x);
 	b->h =  (strlen(text) + (b->w - 1)) / b->w; //rounding up
+	b->name = NULL;
 	return b;
 }
 
@@ -224,6 +251,7 @@ Body *newTextBox(int x, int y, char *text, int wrap, char c) {
 	b->h = (strlen(text)+(b->w-1))/b->w;
 	b->mode='l';
 	b->c = c;
+	b->name = NULL;
 	b->draw = paintTextBox;
 	b->addStroke = _body_addStroke;
 
