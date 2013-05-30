@@ -178,7 +178,7 @@ void initBodies() {
 	bodies = newList();
 }
 
-Body *_defBody(int x, int y, int w, int h, char c) {
+Body *_defBody(int x, int y, int w, int h, char c, void (*draw)(Body*)) {
 	Body *b = (Body*) malloc(sizeof(Body));
 	b->x = x;
 	b->y = y;
@@ -186,12 +186,12 @@ Body *_defBody(int x, int y, int w, int h, char c) {
 	b->h = h;
 	b->c = c;
 	b->name = NULL;
+	b->draw = draw;
 	return b;
 }
 
 Body *newPoint(int x, int y, char c) {
-	Body *b = _defBody(x, y, 1, 1, c);
-	b->draw = paintPoint;
+	Body *b = _defBody(x, y, 1, 1, c, paintPoint);
 	return b;
 }
 
@@ -209,24 +209,22 @@ Body *newText(int x, int y, char *text, int wrap) { //wrap = -1 -> never wrap, w
 	return b;
 }
 
-Body *newRectangle(int x, int y, int w, int h, char c,char mode){
-	Body *b = _defBody(x, y, w, h, c);
-	b->draw = paintRectangle;
+Body *newRectangle(int x, int y, int w, int h, char c, char mode){
+	Body *b = _defBody(x, y, w, h, c, paintRectangle);
 	b->mode = mode;
 	b->addStroke = _body_addStroke;
 	return b;
 }
 
 Body *newCircle(int x, int y, int r, char c, char mode){
-	Body *b = _defBody(x, y, r, r, c);
-	b->draw = paintCircle;
+	Body *b = _defBody(x, y, r, r, c, paintCircle);
 	b->addStroke = _body_addStroke;
 	b->mode = mode;
 	return b;
 }
 
 Body *newLine(int x, int y, int size, char dir, char c) {
-	Body *b = _defBody(x, y, 0, 0, c);
+	Body *b = _defBody(x, y, 0, 0, c, paintLine);
 	if(dir=='h') {
 		b->w = size;
 		b->h = 0;
@@ -234,7 +232,6 @@ Body *newLine(int x, int y, int size, char dir, char c) {
 		b->h = size;
 		b->w = 0;
 	}
-	b->draw = paintLine;
 	b->addStroke = _body_addStroke;
 	return b;
 }

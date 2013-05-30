@@ -3,6 +3,11 @@
 
 #include <stdarg.h>
 
+#define _STROKE_TOP 0
+#define _STROKE_RIGHT 1
+#define _STROKE_BOTTOM 2
+#define _STROKE_LEFT 3
+
 typedef struct {
 	int size;
 	int index;
@@ -16,26 +21,18 @@ struct strokestruct {
 	int size;
 	int index;
 	char *owner;
+	char joint;
 	void (*next)(Stroke*);
 	void (*prev)(Stroke*);
 };
 
 /* Cycles to the next Stroke border char */
 void _border_next (Stroke *s) {
-	int sIndex;
-	int bIndex;
-	Border *b;
+	int side = 0;
+	Border *b = s->border[side];
+	int bIndex = b->index;
 
-	//sIndex = s->index;
-	//if(border[sIndex]->index>border[sIndex]->size) s->index++;
-	sIndex = s->index;
-
-	if(sIndex>=s->size) sIndex = s->index = 0;
-	b = s->border[sIndex];
-
-	b->index++;
-
-	bIndex = b->index;
+	bIndex = ++b->index;
 	if(bIndex>=b->size) bIndex = b->index = 0;
 
 	*(s->owner) = b->border[bIndex];
@@ -43,19 +40,11 @@ void _border_next (Stroke *s) {
 
 /* Cycles to the prev Stroke border char */
 void _border_prev(Stroke *s) {
-	int sIndex;
-	int bIndex;
-	Border *b;
+	int side = 0;
+	Border *b = s->border[side];
+	int bIndex = b->index;
 
-	//if(border[sIndex]->index<0) s->index--;
-	//s->index--;
-	b->index--;
-	sIndex = s->index;
-
-	if(sIndex<0) sIndex = s->index = s->size-1;
-	b = s->border[sIndex];
-
-	bIndex = b->index;
+	bIndex = --b->index;
 	if(bIndex<0) bIndex = b->index = b->size-1;
 
 	*(s->owner) = b->border[bIndex];
@@ -81,6 +70,10 @@ Stroke *newStroke(int n, ...) {
 	s->size = n;
 
 	return s;
+}
+
+void setStrokeJoint(Stroke *s, char joint) {
+	s->joint = joint;
 }
 
 /* Creates a new side-border with the given chars */
