@@ -19,6 +19,7 @@ struct ll {
 	void* (*remove)(LinkedList*, int);
 	void* (*get)(LinkedList*, int);
 	Node* (*getNode)(LinkedList*, int);
+	void (*set)(LinkedList*, int, void*);
 };
 
 static Node *_list_getNode(LinkedList *list, int index) {
@@ -31,6 +32,10 @@ static Node *_list_getNode(LinkedList *list, int index) {
 	else 
 		for(i = list->size - 1; i > index ; i--) n = n->prev;
 	return n;
+}
+
+static void _list_set(LinkedList *list, int index, void* e) {
+	_list_getNode(list, index)->value = e;
 }
 
 static int _list_add(LinkedList* list, void* b) {
@@ -61,6 +66,8 @@ static int _list_add(LinkedList* list, void* b) {
 
 	return list->size++;
 }
+
+
 
 void *removeNode(Node *n) {
 	void *v = NULL;
@@ -97,6 +104,7 @@ LinkedList* newList() {
 	list->remove = _list_remove;
 	list->get = _list_get;
 	list->getNode = _list_getNode;
+	list->set = _list_set;
 
 	return list;
 }

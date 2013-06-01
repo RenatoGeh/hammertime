@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include "stroke.h"
 
+#define range(a, b, r) (a>=(b-r) && a<=(b+r))
+
 typedef struct bodystruct Body;
 
 struct bodystruct {
@@ -21,56 +23,65 @@ typedef struct {
 
 LinkedList *bodies = NULL;
 
+#include "table.h"
+
 void _body_addStroke(Body *b, Stroke *s) {
+	int i;
 	b->stroke = s;
 	s->owner = &(b->c);
-	s->next(s);
-	s->prev(s);
+	for(i=0;i<s->size;i++)
+		if(s->border[i]!=NULL)
+			s->prev(s, i);
 }
 
 void paintRectangle(Body *self) {
 	int i, j, x = self->x, y = self->y;
 	int w=self->w, h=self->h;
 	Stroke *s = self->stroke;
-	if(self->mode == 'f')                    // Modo Fill
-		for(i = x;i < x + w; i++)
-			for(j = y; j < y + h; j++) {
-				paint(i,j,self->c);
-				if(s!=NULL) s->next(s);
+	int nil = s==NULL;
+	char c = self->c;
+
+	for(i=x;i<=x+w;i++) {
+		paint(i, y, nil?c:(c=s->next(s, _STROKE_TOP)));
+		paint(i, y+h, border_exists(s, _STROKE_BOTTOM)==1?s->next(s, _STROKE_BOTTOM):c);
+		if(!nil && s->joint != '\0')
+			if(i==x || i==x+w) {
+				paint(i, y, s->joint);
+				paint(i, y+h, s->joint);
 			}
-	else                                 //Modo Line
-		for(j = y; j < y + h; j++)
-			if(j == y || j == (y + h - 1))  //Se for primeira ou ultima linha
-				for(i = x; i < x + w ; i++) {
-					paint(i,j,self->c);
-					if(s!=NULL) s->next(s);
-				}
-			else {
-				paint(x,j,self->c);
-				if(s!=NULL) s->next(s);
-				paint((x + w - 1),j,self->c);
-				if(s!=NULL) s->next(s);
-			}
+	}
+	for(i=y+1;i<y+h;i++) {
+		paint(x, i, nil?c:(c=s->next(s, _STROKE_LEFT)));
+		paint(x+w, i, border_exists(s, _STROKE_RIGHT)==1?s->next(s, _STROKE_RIGHT):c);
+	}
+
+	if(self->mode=='f')
+		for(i=x+1;i<x+w;i++)
+			for(j=y+1;j<y+h;j++)
+				paint(i, j, c);
 }
 
 void paintCircle(Body *self) {
-	int i, j, x = self->x, y = self->y, r = self->w - 1;
+	int i, j, x = self->x, y = self->y, r = self->w;
+	int centerX = x+r, centerY = y+r;
+	int endX = x+2*r, endY = y+2*r;
+	int dx, dy, dt;
 	Stroke *s = self->stroke;
-	if(self->mode == 'f'){
-		for(i = x - r; i <= x + r; i++)
-			for (j = y - r; j <= y + r; j++)
-				if( ( (i-x) * (i-x) ) + ( (j-y) * (j-y) ) <= r*r) {
-					paint(i,j,self->c);
-					if(s!=NULL) s->next(s);
-				}
+	int nil = s==NULL;
+	char mode = self->mode;
+	char c = self->c;
+
+	for(i=x;i<=endX;i++) {
+		dx = centerX-i;
+		for(j=y;j<=endY;j++) {
+			dy = centerY - j;
+			dt = dx*dx+dy*dy;
+			if(range(dt, r*r, 4))
+				paint(i, j, nil?c:s->next(s, _STROKE_TOP));
+			else if(mode=='f' && dt<r*r)
+				paint(i, j, c);
+		}
 	}
-	else
-		for(i = x - r; i <= x + r; i++)
-			for (j = y - r; j <= y + r; j++)
-				if( (( (i-x) * (i-x) ) + ( (j-y) * (j-y) ) >= r*r-2) && (( (i-x) * (i-x) ) + ( (j-y) * (j-y) ) <= r*r)) {
-					paint(i,j,self->c);
-					if(s!=NULL) s->next(s);
-				}
 }
 
 void paintPoint(Body *self) {
@@ -86,13 +97,13 @@ void paintText(Body *self) {
 }
 
 void paintTextBox(Body *self) {
-	self->w+=2;
-	self->h+=2;
+	self->w++;
+	self->h++;
 	self->x--;
 	self->y--;
 	paintRectangle(self);
-	self->w-=2;
-	self->h-=2;
+	self->w--;
+	self->h--;
 	self->x++;
 	self->y++;
 	paintText(self);
@@ -160,18 +171,21 @@ void clearBodies() {
 }
 
 void paintLine(Body *self) {
-	int i;
+	int i, x=self->x, y=self->y;
 	Stroke *s = self->stroke;
-	if(self->h == 0) //vertical
-		for(i = 0; i < self->w; i++) {
-			paint(self->x + i, self->y, self->c);
-			if(s!=NULL) s->next(s);
-		}
-	else		//horizontal
-		for(i = 0; i < self->h; i++) {
-			paint(self->x, self->y + i, self->c);
-			if(s!=NULL) s->next(s);
-		}
+	int nil = s==NULL;
+
+	if(self->h == 0)  //vertical
+		for(i = 0; i < self->w; i++)
+			paint(x + i, y, nil?self->c:s->next(s, _STROKE_TOP));
+	else  //horizontal
+		for(i = 0; i < self->h; i++)
+			paint(x, y + i, nil?self->c:s->next(s, _STROKE_TOP));
+
+	if(!nil && s->joint!='\0') {
+		paint(x, y, s->joint);
+		paint(x+self->w, y+self->h, s->joint);
+	}
 }
 
 void initBodies() {
@@ -179,7 +193,7 @@ void initBodies() {
 }
 
 Body *_defBody(int x, int y, int w, int h, char c, void (*draw)(Body*)) {
-	Body *b = (Body*) malloc(sizeof(Body));
+	Body *b = (Body*)malloc(sizeof(Body));
 	b->x = x;
 	b->y = y;
 	b->w = w;
@@ -187,6 +201,7 @@ Body *_defBody(int x, int y, int w, int h, char c, void (*draw)(Body*)) {
 	b->c = c;
 	b->name = NULL;
 	b->draw = draw;
+	b->stroke = NULL;
 	return b;
 }
 
