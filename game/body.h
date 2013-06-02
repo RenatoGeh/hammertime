@@ -99,6 +99,7 @@ void paintTextBox(Body *self) {
 }
 
 void clearBody(Body *b) {
+	free(b->stroke);
 	free(b);
 }
 
@@ -165,12 +166,12 @@ void paintLine(Body *self) {
 	if(self->h == 0) //vertical
 		for(i = 0; i < self->w; i++) {
 			paint(self->x + i, self->y, self->c);
-			if(s!=NULL) s->next(s);
+			if(s) s->next(s);
 		}
 	else		//horizontal
 		for(i = 0; i < self->h; i++) {
 			paint(self->x, self->y + i, self->c);
-			if(s!=NULL) s->next(s);
+			if(s) s->next(s);
 		}
 }
 
@@ -186,6 +187,7 @@ Body *_defBody(int x, int y, int w, int h, char c) {
 	b->h = h;
 	b->c = c;
 	b->name = NULL;
+	b->stroke = NULL;
 	return b;
 }
 
@@ -206,6 +208,7 @@ Body *newText(int x, int y, char *text, int wrap) { //wrap = -1 -> never wrap, w
 	b->w = wrap? (wrap>0? min(strlen(text),wrap) : strlen(text)) : min(strlen(text), screen.width - x);
 	b->h =  (strlen(text) + (b->w - 1)) / b->w; //rounding up
 	b->name = NULL;
+	b->stroke = NULL;
 	return b;
 }
 
@@ -253,6 +256,7 @@ Body *newTextBox(int x, int y, char *text, int wrap, char c) {
 	b->c = c;
 	b->name = NULL;
 	b->draw = paintTextBox;
+	b->stroke = NULL;
 	b->addStroke = _body_addStroke;
 
 	return b;
