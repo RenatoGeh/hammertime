@@ -23,7 +23,6 @@ typedef struct {
 
 LinkedList *bodies = NULL;
 
-#include "table.h"
 
 void _body_addStroke(Body *b, Stroke *s) {
 	int i;
@@ -38,7 +37,7 @@ void paintRectangle(Body *self) {
 	int i, j, x = self->x, y = self->y;
 	int w=self->w, h=self->h;
 	Stroke *s = self->stroke;
-	int nil = s==NULL;
+	char nil = s==NULL;
 	char c = self->c;
 
 	for(i=x;i<=x+w;i++) {
@@ -67,7 +66,7 @@ void paintCircle(Body *self) {
 	int endX = x+2*r, endY = y+2*r;
 	int dx, dy, dt;
 	Stroke *s = self->stroke;
-	int nil = s==NULL;
+	char nil = s==NULL;
 	char mode = self->mode;
 	char c = self->c;
 
@@ -97,16 +96,12 @@ void paintText(Body *self) {
 }
 
 void paintTextBox(Body *self) {
-	self->w++;
-	self->h++;
-	self->x--;
-	self->y--;
 	paintRectangle(self);
-	self->w--;
-	self->h--;
 	self->x++;
 	self->y++;
 	paintText(self);
+	self->x--;
+	self->y--;
 }
 
 void clearBody(Body *b) {
@@ -173,7 +168,7 @@ void clearBodies() {
 void paintLine(Body *self) {
 	int i, x=self->x, y=self->y;
 	Stroke *s = self->stroke;
-	int nil = s==NULL;
+	char nil = s==NULL;
 
 	if(self->h == 0)  //vertical
 		for(i = 0; i < self->w; i++)
@@ -259,8 +254,8 @@ Body *newTextBox(int x, int y, char *text, int wrap, char c) {
 	b = (Body*)t;
 	b->x = x;
 	b->y = y;
-	b->w = wrap?(wrap>0?min(strlen(text), wrap):strlen(text)):min(strlen(text), screen.width-x);
-	b->h = (strlen(text)+(b->w-1))/b->w;
+	b->w = wrap?(wrap>0?min(strlen(text), wrap):strlen(text)):min(strlen(text), screen.width-x)+2;
+	b->h = (strlen(text)+(b->w-1))/b->w+1;
 	b->mode='l';
 	b->c = c;
 	b->name = NULL;
@@ -269,5 +264,7 @@ Body *newTextBox(int x, int y, char *text, int wrap, char c) {
 
 	return b;
 }
+
+#include "table.h"
 
 #endif
