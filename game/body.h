@@ -61,7 +61,7 @@ void paintRectangle(Body *self) {
 }
 
 void paintCircle(Body *self) {
-	int i, j, x = self->x, y = self->y, r = self->w;
+	int i, j, x = self->x, y = self->y, r = self->w/2;
 	int centerX = x+r, centerY = y+r;
 	int endX = x+2*r, endY = y+2*r;
 	int dx, dy, dt;
@@ -229,7 +229,7 @@ Body *newRectangle(int x, int y, int w, int h, char c, char mode){
 }
 
 Body *newCircle(int x, int y, int r, char c, char mode){
-	Body *b = _defBody(x, y, r, r, c, paintCircle);
+	Body *b = _defBody(x, y, 2*r, 2*r, c, paintCircle);
 	b->addStroke = _body_addStroke;
 	b->mode = mode;
 	return b;
