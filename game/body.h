@@ -96,7 +96,9 @@ void paintText(Body *self) {
 }
 
 void paintTextBox(Body *self) {
+	self->w++;
 	paintRectangle(self);
+	self->w--;
 	self->x++;
 	self->y++;
 	paintText(self);

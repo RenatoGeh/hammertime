@@ -1,0 +1,11 @@
+#!/usr/bin/env xdg-open
+
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+Icon[en_US]=/home/uspgamedev/rilifon/Documents/Sublime Text 2/Icon/48x48/sublime_text.png
+Exec="/home/uspgamedev/rilifon/Documents/Sublime Text 2/sublime_text"
+Name[en_US]=Sublime Text
+Name=Sublime Text
+Icon=tomboy
