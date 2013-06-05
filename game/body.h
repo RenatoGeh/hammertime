@@ -210,14 +210,33 @@ Body *newPoint(int x, int y, char c) {
 Body *newText(int x, int y, char *text, int wrap) { //wrap = -1 -> never wrap, wrap = 0 -> wrap only on screen end, wrap>0 warp every wrap chars
 	Text *t = (Text*) malloc(sizeof(Text));
 	Body *b = NULL;
+	int n = strlen(text);
+
+	if(wrap>10) {
+		int i, j, k, l;
+
+		for(i=0,k=0;i<n;i++,k++) {
+			if(text[i]==' ') k=0;
+			if(k>wrap) {
+				for(l=i;l<n;l++)
+					text[n-l+k]=text[l];
+				for(j=i-k;j<=i;j++) {
+					n++;
+					text[j]=' ';
+				}
+			}
+		}
+	}
+
 	t->text = text;
 	b = (Body*) t;
 	b->draw = paintText;
 	b->x = x;
 	b->y = y;
-	b->w = wrap? (wrap>0? min(strlen(text),wrap) : strlen(text)) : min(strlen(text), screen.width - x);
-	b->h =  (strlen(text) + (b->w - 1)) / b->w; //rounding up
+	b->w = wrap? (wrap>0? min(n,wrap) : n) : min(n, screen.width - x);
+	b->h =  (n + (b->w - 1)) / b->w; //rounding up
 	b->name = NULL;
+
 	return b;
 }
 
@@ -251,13 +270,30 @@ Body *newLine(int x, int y, int size, char dir, char c) {
 Body *newTextBox(int x, int y, char *text, int wrap, char c) {
 	Text *t = (Text*)malloc(sizeof(Text));
 	Body *b = NULL;
+	int n = strlen(text);
+
+	if(wrap>10) {
+		int i, j, k, l;
+
+		for(i=0,k=0;i<n;i++,k++) {
+			if(text[i]==' ') k=0;
+			if(k>wrap) {
+				for(l=i;l<n;l++)
+					text[n-l+k]=text[l];
+				for(j=i-k;j<=i;j++) {
+					n++;
+					text[j]=' ';
+				}
+			}
+		}
+	}
 
 	t->text = text;
 	b = (Body*)t;
 	b->x = x;
 	b->y = y;
-	b->w = wrap?(wrap>0?min(strlen(text), wrap):strlen(text)):min(strlen(text), screen.width-x)+2;
-	b->h = (strlen(text)+(b->w-1))/b->w+1;
+	b->w = wrap?(wrap>0?min(n, wrap):n):min(n, screen.width-x)+2;
+	b->h = (n+(b->w-1))/b->w+1;
 	b->mode='l';
 	b->c = c;
 	b->name = NULL;
