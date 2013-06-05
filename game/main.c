@@ -77,8 +77,10 @@ int run() {
 	registerBody("t6", newText(65, 9, "STOP!", 0));
 	registerBody("t7", newText(40, 12, "    Welcome to *hammertime*, a text-based ""visual"" framework, made with and functional with the language C.", 60));
 	registerBody("t8", newText(40, 15, "    The original idea was to create a simple yet useful     framework to use in projects using C, that didn't require   much knowledge in programming", 60));
-
-	Body *introduction = newTextBox(60, 1, "INTRODUCTION", -1, '!');
+	registerBody("t8", newText(40, 19, "    This little guide will help you with the basics of      *hammertime*. The window on the left indicates the page     you're on. To proceed to another page, type its number and  press enter", 60));
+	registerBody("t10", newText(36,27, " For more information, questions or a more detailed guide, check our wiki at:",-1));
+	registerBody("t10", newText(45,29, " * http://www.renatowhyareyoudoingthistome.com *",-1));
+	Body *introduction = newTextBox(60, 1, " INTRODUCTION ", -1, '!');
 	Stroke *intStroke = newStroke(4, newBorder("="), newBorder("+"), newBorder("="), newBorder("+"));
 	introduction->addStroke(introduction,intStroke);
 	setStrokeJoint(intStroke, '+');
