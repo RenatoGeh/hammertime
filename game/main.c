@@ -4,8 +4,8 @@
 #include <string.h>
 
 int run() {
-	/*char *t = (char*)malloc(sizeof(char));
-	registerBody("t1", newTextBox(5, 15, "We can barely fit anything in this thing!", 11, '*'));
+	/*char *t [= (char*)malloc(sizeof(char))];
+	registerBody("t1", newTextBox(50, 15, "STOP", 11, '*'));
 	registerBody("t2", newTextBox(22, 10, "THAT'S WHAT SHE SAID", 1, '<'));
 	registerBody("t3", newTextBox(30, 20, "Hey, Michael Scott is back!", 0, '='));
 	registerBody("t4", newTextBox(40, 28, "feelings", -1, '#'));
@@ -40,15 +40,15 @@ int run() {
 
 	draw();
 	gets(t);
-	killByName(t);*/
-
-	Body *t = newTable(0, 0, 5, 5, -25, -12, '!', '=');
+	killByName(t);
+*/
+	/*Body *t = newTable(0, 0, 5, 5, 25, 12, '!', '=');
 	Stroke *s = newStroke(4, newBorder("-"), newBorder("|"), newBorder("-"), newBorder("|"));
 	t->addStroke(t, s);
 	setStrokeJoint(s, 'O');
 
 	Table *tab = (Table*)t;
-	Body *c = newCircle(0, 0, 5, '*', 'l');
+	Body *c = newCircle(0, 0, 4, '*', 'l');
 	c->addStroke(c, newStroke(1, newBorder("!@#$^&*()-+")));
 	tab->add(tab, c, 1, 1, 1);
 
@@ -67,4 +67,28 @@ int run() {
 
 	registerBody("t", t);
 	draw();
+	*/
+	registerBody("tb1", newTextBox(12, 1, " *HAMMERTIME* ", -1, '#'));
+	registerBody("t1", newText(10, 5, "Table of Content", 0));
+	registerBody("t2", newText(10, 6, "________________", 0));
+	registerBody("t3", newText(8, 10, "1.  * Introduction", 0));
+	registerBody("t4", newText(8, 12, "2.    Bla", 0));
+	registerBody("t5", newText(8, 14, "3.    Bla2", 0));
+	registerBody("t6", newText(65, 9, "STOP!", 0));
+	registerBody("t7", newText(40, 12, "    Welcome to *hammertime*, a text-based ""visual"" framework, made with and functional with the language C.", 60));
+	registerBody("t8", newText(40, 15, "    The original idea was to create a simple yet useful     framework to use in projects using C, that didn't require   much knowledge in programming", 60));
+
+	Body *introduction = newTextBox(60, 1, "INTRODUCTION", -1, '!');
+	Stroke *intStroke = newStroke(4, newBorder("="), newBorder("+"), newBorder("="), newBorder("+"));
+	introduction->addStroke(introduction,intStroke);
+	setStrokeJoint(intStroke, '+');
+	registerBody("int", introduction);
+	
+	Body *line = newLine(35, 1, 60, 'v', '-');
+	Stroke *lineStroke = newStroke(1, newBorder("*"));
+	line->addStroke(line, lineStroke);
+	setStrokeJoint(lineStroke, '#');
+	registerBody("line1", line);
+	draw();
+
 }

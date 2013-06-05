@@ -31,7 +31,7 @@ A MARVELLOUS SOFT PRODUCTION
 with the language C.
 
 	The original idea was to create a simple yet useful framework to use in
-projects using C, that require xxx
+projects using C, that didn't require much knowledge in programming.
 
 
 
