@@ -42,13 +42,13 @@ int run() {
 	gets(t);
 	killByName(t);*/
 
-	Body *t = newTable(0, 0, 5, 5, 25, 12, '!', '=');
+	Body *t = newTable(0, 0, 5, 5, -25, -12, '!', '=');
 	Stroke *s = newStroke(4, newBorder("-"), newBorder("|"), newBorder("-"), newBorder("|"));
 	t->addStroke(t, s);
 	setStrokeJoint(s, 'O');
 
 	Table *tab = (Table*)t;
-	Body *c = newCircle(0, 0, 4, '*', 'l');
+	Body *c = newCircle(0, 0, 5, '*', 'l');
 	c->addStroke(c, newStroke(1, newBorder("!@#$^&*()-+")));
 	tab->add(tab, c, 1, 1, 1);
 

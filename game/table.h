@@ -64,8 +64,8 @@ void _table_add(Table *t, Body *b, int x, int y, char centers) {
 	Body base = t->base;
 
 	if(centers) {
-		b->x = (base.x+(x*t->wline)+1) + (t->wline-b->w)/2;
-		b->y = (base.y+(y*t->hcol)+1) + (t->hcol-b->h)/2;
+		b->x = (base.x+(x*t->wline)+1) + (t->wline-b->w)/2-1;
+		b->y = (base.y+(y*t->hcol)+1) + (t->hcol-b->h)/2-1;
 	} else {
 		b->x += base.x+(x*t->wline)+1;
 		b->y += base.y+(y*t->hcol)+1;
@@ -99,6 +99,9 @@ Body *newTable(int x, int y, int lines, int cols, int wline, int hcol, char c1, 
 	Body *b = NULL;
 	Table *t = (Table*)malloc(sizeof(Table));
 	int i, j;
+
+	wline = wline<0?((screen.width-1)/lines):wline;
+	hcol = hcol<0?((screen.height-1)/cols):hcol;
 
 	t->lines = lines;
 	t->cols = cols;
