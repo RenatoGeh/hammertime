@@ -149,6 +149,7 @@ int run() {
 	gets(foo);
 
 	clearAndRefresh();
+	clearBodies();
 
 	draw();
 }

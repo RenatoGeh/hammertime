@@ -11,22 +11,21 @@ Body *newHeader(int x, int y, char *text, int wrap) {
 int drawSide(int page) {
 	int i, n=3;
 	char *contents[] = {"Introduction", "Bodies", "Tables"};
-
+	
 	registerBody(NULL, newTextBox(10, 1, "  HAMMERTIME  ", -1, '#'));
 	registerBody(NULL, newLine(2, 4, 150, 'h', '-'));
 	registerBody(NULL, newText(10, 5, "Table of Content", 0));
 	registerBody(NULL, newLine(10, 6, 16, 'h', '_'));
-
+	
 	for(i=0;i<n;i++) {
 		char *name = (char*)malloc(sizeof(char));
 		char *section = (char*)malloc(sizeof(char));
-
 		sprintf(name, "t%d", i);
 		sprintf(section, "%d.    %s", i, contents[i]);
 		registerBody(name, newText(8, 10+2*i, section, 0));
 	}
-
-	registerBody("", newPoint(13, 10+2*page, '*'));
+	
+	registerBody(NULL, newPoint(13, 10+2*page, '*'));
 	return n;
 }
 
@@ -41,7 +40,7 @@ void drawBoard(int page) {
 
 			registerBody(NULL, newText(40, 19, "    This little guide will help you with the basics of      *hammertime*. The window on the left indicates the page     you're on. To proceed to the next page, type 'next' (or     'n'). To return to the previous page, type 'prev' (or 'p'). Or if you want you can just type the page's number and pressenter.", 60));
 			registerBody(NULL, newText(40, 26, "    Type 'exit' at any time to leave this guide.", 0));
-			registerBody(NULL, newText(40, 29, "    For more information, questions or a more detailed     guide, check our wiki at:", 60));
+			registerBody(NULL, newText(40, 29, "    For more information, questions or a more detailed guide, check our wiki at:", 60));
 
 			registerBody(NULL, newText(45, 32, "https://github.com/RenatoGeh/hammertime/wiki", 0));
 		break;
@@ -79,7 +78,6 @@ void handleInput(int *page, int n, char* input) {
 int run() {
 	int page = 0, npage;
 	char *input = (char*)malloc(sizeof(char));
-
 	do {
 		npage = drawSide(page);
 		drawBoard(page);

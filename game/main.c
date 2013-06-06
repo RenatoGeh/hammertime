@@ -4,7 +4,7 @@
 #include <string.h>
 
 int run() {
-	/*char *t [= (char*)malloc(sizeof(char))];
+	/*char *t = (char*)malloc(sizeof(char));
 	registerBody("t1", newTextBox(50, 15, "STOP", 11, '*'));
 	registerBody("t2", newTextBox(22, 10, "THAT'S WHAT SHE SAID", 1, '<'));
 	registerBody("t3", newTextBox(30, 20, "Hey, Michael Scott is back!", 0, '='));
@@ -40,9 +40,9 @@ int run() {
 
 	draw();
 	gets(t);
-	killByName(t);
-*/
-	/*Body *t = newTable(0, 0, 5, 5, 25, 12, '!', '=');
+	killByName(t);*/
+
+	/*Body *t = newTable(0, 0, 5, 5, -25, -12, '!', '=');
 	Stroke *s = newStroke(4, newBorder("-"), newBorder("|"), newBorder("-"), newBorder("|"));
 	t->addStroke(t, s);
 	setStrokeJoint(s, 'O');
@@ -66,31 +66,5 @@ int run() {
 	tab->add(tab, tb, 2, 4, 1);
 
 	registerBody("t", t);
-	draw();
-	*/
-	registerBody("tb1", newTextBox(12, 1, " *HAMMERTIME* ", -1, '#'));
-	registerBody("t1", newText(10, 5, "Table of Content", 0));
-	registerBody("t2", newText(10, 6, "________________", 0));
-	registerBody("t3", newText(8, 10, "1.  * Introduction", 0));
-	registerBody("t4", newText(8, 12, "2.    Bla", 0));
-	registerBody("t5", newText(8, 14, "3.    Bla2", 0));
-	registerBody("t6", newText(65, 9, "STOP!", 0));
-	registerBody("t7", newText(40, 12, "    Welcome to *hammertime*, a text-based ""visual"" framework, made with and functional with the language C.", 60));
-	registerBody("t8", newText(40, 15, "    The original idea was to create a simple yet useful     framework to use in projects using C, that didn't require   much knowledge in programming", 60));
-	registerBody("t8", newText(40, 19, "    This little guide will help you with the basics of      *hammertime*. The window on the left indicates the page     you're on. To proceed to another page, type its number and  press enter", 60));
-	registerBody("t10", newText(36,27, " For more information, questions or a more detailed guide, check our wiki at:",-1));
-	registerBody("t10", newText(45,29, " * http://www.renatowhyareyoudoingthistome.com *",-1));
-	Body *introduction = newTextBox(60, 1, " INTRODUCTION ", -1, '!');
-	Stroke *intStroke = newStroke(4, newBorder("="), newBorder("+"), newBorder("="), newBorder("+"));
-	introduction->addStroke(introduction,intStroke);
-	setStrokeJoint(intStroke, '+');
-	registerBody("int", introduction);
-	
-	Body *line = newLine(35, 1, 60, 'v', '-');
-	Stroke *lineStroke = newStroke(1, newBorder("*"));
-	line->addStroke(line, lineStroke);
-	setStrokeJoint(lineStroke, '#');
-	registerBody("line1", line);
-	draw();
-
+	draw();*/
 }
