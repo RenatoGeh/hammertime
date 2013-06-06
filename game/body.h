@@ -146,8 +146,9 @@ void killByName(char *name) {
 
 Body *getByName(char *name) {
 	Node *n = bodies->head;
+	if(name==NULL) return NULL;
 	while(n) {
-		if(strcmp(name, ((Body*)n->value)->name) == 0)
+		if(strcmp(name, ((Body*)(n->value))->name) == 0)
 			return n->value;
 		n = n->next;
 	}
