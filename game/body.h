@@ -213,7 +213,7 @@ Body *newText(int x, int y, char *text, int wrap) { //wrap = -1 -> never wrap, w
 	Body *b = NULL;
 	int n = strlen(text);
 
-	/*if(wrap>10) {
+	if(wrap>10) {
 		int i, j, k, l;
 
 		for(i=0,k=0;i<n;i++,k++) {
@@ -227,7 +227,7 @@ Body *newText(int x, int y, char *text, int wrap) { //wrap = -1 -> never wrap, w
 				}
 			}
 		}
-	}*/
+	}
 
 	t->text = text;
 	b = (Body*) t;
@@ -306,6 +306,7 @@ Body *newTextBox(int x, int y, char *text, int wrap, char c) {
 	return b;
 }
 
+#include "function.h"
 #include "table.h"
 
 #endif

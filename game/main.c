@@ -4,6 +4,23 @@
 #include <string.h>
 
 int run() {
+	char *str = (char*)malloc(100*sizeof(char));
+	Polynomial *poly;
+
+	registerBody("x-axis", newLine(0, screen.height/2, screen.width, 'h', '-'));
+	registerBody("y-axis", newLine(screen.width/2, 0, screen.height, 'v', '|'));
+	registerBody("Poly", newPolynomial(0, 0, -1, -1, '*', 1, 1, -screen.width/2));
+
+	poly = (Polynomial*)getByName("Poly");
+	poly->toString(str, poly);
+
+	registerBody("xlabel", newText(0, screen.height/2-1, "x-axis", 0));
+	registerBody("ylabel", newText(screen.width/2+1, 0, "y-axis", 1));
+
+	draw();
+
+	puts("Poly:");
+	puts(str);
 	/*char *t = (char*)malloc(sizeof(char));
 	registerBody("t1", newTextBox(50, 15, "STOP", 11, '*'));
 	registerBody("t2", newTextBox(22, 10, "THAT'S WHAT SHE SAID", 1, '<'));
