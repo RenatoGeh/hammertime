@@ -39,38 +39,41 @@ void drawBoard(int page) {
 
 			registerBody("NULL", newText(40, 19, "    This little guide will help you with the basics of      *hammertime*. The window on the left indicates the page     you're on. To proceed to the next page, type 'next' (or     'n'). To return to the previous page, type 'prev' (or 'p'). Or if you want you can just type the page's number and pressenter.", max(60, screen.width-40)));
 			registerBody("NULL", newText(40, 26, "    Type 'exit' at any time to leave this guide.", 0));
-			registerBody("NULL", newText(40, 29, "    For more information, questions or a more detailed guide, check our wiki at:", max(60, screen.width-40)));
 
 			registerBody("NULL", newText(45, 32, "https://github.com/RenatoGeh/hammertime/wiki", 0));
 		break;
 		case 1:
 			registerBody("NULL", newHeader(60, 1, "USING *HAMMERTIME*", -1));
 
-			registerBody("NULL", newText(40, 10, "    First of all, lets see how to include *hammertime* in   any C source file.", max(60, screen.width-40)));
-			registerBody("NULL", newText(40, 13, "    Make sure all files from *hammertime* are in the same   folder as your project.", max(60, screen.width-40)));
-			registerBody("NULL", newText(40, 16, "    Just as any other library, you'll need to include       \"hammertime.h\" in the beginning of your C project(#include  \"hammertime.h\").", max(60, screen.width-40)));
-			registerBody("NULL", newText(40, 20, "    Instead of a \"int main()\" function, you'll write the    things *hammertime* will print in a \"int run()\" function.", max(60, screen.width-40)));
-			registerBody("NULL", newText(40, 23, "    But just as a normal C source file, you can write other functions as well.", max(60, screen.width-40)));
-			registerBody("NULL", newText(40, 25, "    Example of a simple *hammertime* project:", max(60, screen.width-40)));
+			registerBody("NULL", newText(40, 10, "    First of all, lets see how to include *hammertime* in   any C source file.", 60));
+			registerBody("NULL", newText(40, 13, "    Make sure all files from *hammertime* are in the same   folder as your project.", 60));
+			registerBody("NULL", newText(40, 16, "    Just as any other library, you'll need to include       \"hammertime.h\" in the beginning of your C project(#include  \"hammertime.h\").", 60));
+			registerBody("NULL", newText(40, 20, "    Instead of a \"int main()\" function, you'll write the    things *hammertime* will print in a \"int run()\" function.", 60));
+			registerBody("NULL", newText(40, 23, "    But just as a normal C source file, you can write other functions as well.", 60));
+			registerBody("NULL", newText(40, 25, "    Example of a simple *hammertime* project:", 60));
 			registerBody("NULL", newTextBox(40, 29, "#include \"hammertime.h\"", 40, '#'));
 		break;
 		case 2:
 			registerBody("NULL", newHeader(60, 1, "BODIES AND BASIC DRAWING", -1));
 
-			registerBody("NULL", newText(40, 10, "    In *hammertime*, the basic thing you'll need to learn is how to create (or register) \"bodies\" and make them visible.", max(60, screen.width-40)));
-			registerBody("NULL", newText(40, 13, "    A body is some sort of object, and it may vary from a simple text to a circle made of \"$\".", max(60, screen.width-40)));
-			registerBody("NULL", newText(40, 16, "    To create a simple body you follow this model:", max(60, screen.width-40)));
-			registerBody("NULL", newText(40, 19, "       registerBody(name, newThing(thing parameters));", max(60, screen.width-40)));
+			registerBody("NULL", newText(40, 10, "    In *hammertime*, the basic thing you'll need to learn is how to create (or register) \"bodies\" and make them visible.", 60));
+			registerBody("NULL", newText(40, 13, "    A body is some sort of object, and it may vary from a simple text to a circle made of \"$\".", 60));
+			registerBody("NULL", newText(40, 16, "    To create a simple body you follow this model:", 60));
+			registerBody("NULL", newText(40, 19, "       registerBody(name, newThing(thing parameters));", 60));
 		break;
 	}
+}
+
+char isKeyword(char *input, char *key) {
+	return (input[0]==key[0] && input[1]=='\0') || !strcmp(input, key);
 }
 
 void handleInput(int *page, int n, char* input) {
 	if(input[0]>='0' && input[0]<='9' && input[0]-'0'<n)
 		*page=input[0]-'0';
-	else if(*page<n-1 && ((input[0]=='n'&&input[1]=='\0') || !strcmp(input, "next")))
+	else if(*page<n-1 && isKeyword(input, "next"))
 		(*page)++;
-	else if(*page>0 && ((input[0]=='p'&&input[1]=='\0') || !strcmp(input, "prev")))
+	else if(*page>0 && isKeyword(input, "prev"))
 		(*page)--;
 }
 
@@ -94,7 +97,7 @@ int run() {
 		
 		clearAndRefresh();
 		clearBodies();
-	} while(strcmp(input, "exit"));
+	} while(!isKeyword(input, "exit"));
 
 	return 0;
 }

@@ -216,15 +216,19 @@ Body *newText(int x, int y, char *text, int wrap) { //wrap = -1 -> never wrap, w
 	if(wrap>10) {
 		int i, j, k, l;
 
-		for(i=0,k=0;i<n;i++,k++) {
-			if(text[i]==' ') k=0;
-			if(k>wrap) {
+		for(i=0,k=0,l=0;i<n;i++,k++,l++) {
+			if(str[i]==' ') k=0;
+			printf("%d\t%d\t", k, wrap);
+			printf("%s\n", str);
+			if(l>=wrap) {
 				for(l=i;l<n;l++)
-					text[n-l+k]=text[l];
+					str[(n-1)-l+k]=str[l];
 				for(j=i-k;j<=i;j++) {
 					n++;
-					text[j]=' ';
+					str[j]=' ';
 				}
+				l=0;
+				k=0;
 			}
 		}
 	}
