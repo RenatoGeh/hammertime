@@ -12,6 +12,11 @@ typedef struct polystruct {
 	char *(*toString)(char *, struct polystruct *);
 } Polynomial;
 
+void _poly_conpts(int x0, int y0, int x1, int y1, Polynomial *poly) {
+	int dx=x1-x0, dy=y1-y0;
+	int i, j;
+}
+
 void paintPolynomial(Body *b) {
 	Polynomial *poly = (Polynomial*)b;
 	int degree=poly->degree;
@@ -23,16 +28,7 @@ void paintPolynomial(Body *b) {
 
 	if(w<0) w=screen.width;
 	if(h<0) h=screen.height;
-	if(x<0) x=0; if(y<0) y=0;
-
-	/*for(i=x;i<=x+w;i++) {
-		for(j=0,f=0;j<degree+1;j++) {
-			f+=(r=poly->terms[j]);
-			for(l=0,p=1;l<degree;l++,p*=r);
-			f*=p;
-		}
-		paint(i, f, nil?c:s->next(s, _STROKE_TOP));
-	}*/
+	if(x<=0) x=-screen.width/2; if(y<=0) y=0;
 
 	for(i=x;i<=x+w;i++) {
 		for(f=0,j=0;j<=degree;j++) {
@@ -40,21 +36,13 @@ void paintPolynomial(Body *b) {
 			//printf("%d\t%d\n", p, poly->terms[j]);
 			f+=poly->terms[j]*p;
 		}
-		paint(i, screen.height-f, nil?c:s->next(s, _STROKE_TOP));
+		paint(i+screen.width/2, (screen.height-f)-screen.height/2, nil?c:s->next(s, _STROKE_TOP));
 	}
-
-	/*for(i=x;i<=x+w;i++,degree--) {
-		f = poly->terms[l];
-		for(j=0,p=1;j<degree;j++,p*=i);
-		printf("x=%d\ty=%d\tf=%d\tp=%d\n", i, f*p, f, p);
-		//for(r=-_FUNCTION_RANGE;r<=_FUNCTION_RANGE;i++)
-			paint(r+i, r+f*p, nil?c:s->next(s, _STROKE_TOP));
-	}*/
 }
 
 char *_poly_toString(char *str, Polynomial *poly) {
 	int i, degree=poly->degree+1, term;
-	int j=0;
+	int j=0, l, k;
 	
 	str[j++]='f'; str[j++]='('; str[j++]='x'; str[j++]=')'; str[j++]='=';
 	for(i=0;i<degree;i++) {
@@ -64,15 +52,27 @@ char *_poly_toString(char *str, Polynomial *poly) {
 			if(term>=0) str[j++]='+';
 			else str[j++]='-';
 		}
-		if((term=term<0?-term:term)>1)
-			for(;term>0;term/=10)
-				str[j++]='0'+term%10;
+		if((term=term<0?-term:term)>1 && i<degree)
+			for(l=0;term>0;term/=10,l++,j++) {
+				str[j]='0'+term%10;
+				if(l>0) {
+					k=str[j];
+					str[j]=str[j-1];
+					str[j-1]=k;
+				}
+			}
 		if(i<degree-1) {
 			str[j++]='x'; 
 			if((term=poly->degree-i)>1) {
 				str[j++]='^';
-				for(;term>0;term/=10)
-					str[j++]='0'+term%10;
+				for(l=0;term>0;term/=10,l++,j++) {
+					str[j]='0'+term%10;
+					if(l>0) {
+						k=str[j];
+						str[j]=str[j-1];
+						str[j-1]=k;
+					}
+				}
 			}
 		}
 	}
