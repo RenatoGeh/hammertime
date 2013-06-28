@@ -27,6 +27,18 @@ struct strokestruct {
 	char (*exists)(Stroke*, int);
 };
 
+void _stroke_setStrokeJoint(Stroke *s, char joint) {
+	s->joint = joint;
+}
+
+struct stroke_utils {
+	void (*setStrokeJoint)(Stroke *, char);
+} stroke;
+
+void _stroke_init() {
+	stroke.setStrokeJoint = _stroke_setStrokeJoint;
+}
+
 /* Cycles to the next Stroke border char */
 char _border_next (Stroke *s, int side) {
 	//Border *b = s->border[side>s->size-1?_STROKE_TOP:side];
@@ -85,10 +97,6 @@ Stroke *newStroke(int n, ...) {
 	s->joint = '\0';
 
 	return s;
-}
-
-void setStrokeJoint(Stroke *s, char joint) {
-	s->joint = joint;
 }
 
 /* Creates a new side-border with the given chars */

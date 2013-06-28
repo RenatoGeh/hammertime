@@ -2,26 +2,28 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
 int run() {
 	char *str = (char*)malloc(100*sizeof(char));
-	Polynomial *poly;
+	//Polynomial *poly;
 
-	registerBody("x-axis", newLine(0, screen.height/2, screen.width, 'h', '-'));
-	registerBody("y-axis", newLine(screen.width/2, 0, screen.height, 'v', '|'));
-	registerBody("Poly", newPolynomial(-1, -1, -1, -1, '*', 2, 1, 0, -25));
+	//registerBody("Poly", newPolynomial(-1, -1, -1, -1, '*', 2, 1, 0, 0));
+	//registerBody("First", newPolynomial(-1, -1, -1, -1, 'o', 1, 1, 0));
+	//registerBody("Third", newPolynomial(-1, -1, -1, -1, '+', 3, 1, 8, 10, 0));
+	registerBody("Sin", newFunction(-1, -1, -1, -1, '#', sin));
 
-	poly = (Polynomial*)getByName("Poly");
-	poly->toString(str, poly);
+	function.addAxis();
 
-	registerBody("xlabel", newText(0, screen.height/2-1, "x-axis", 0));
-	registerBody("ylabel", newText(screen.width/2+1, 0, "y-axis", 1));
+	//poly = (Polynomial*)getByName("Poly");
+	//poly->toString(str, poly);
 
 	draw();
 
-	puts("Poly:");
-	puts(str);
-	free(str);
+	//puts("Poly:");
+	//puts(str);
+	//free(str);
+
 	/*char *t = (char*)malloc(sizeof(char));
 	registerBody("t1", newTextBox(50, 15, "STOP", 11, '*'));
 	registerBody("t2", newTextBox(22, 10, "THAT'S WHAT SHE SAID", 1, '<'));

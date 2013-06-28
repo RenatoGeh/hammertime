@@ -65,6 +65,9 @@ void closeAll() {
 int main(int argn, char ** args) {
 	int ret;
 
+	_function_init();
+	_stroke_init();
+
 	clearAndRefresh();
 	
 	initBodies();

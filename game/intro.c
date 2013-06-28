@@ -4,14 +4,14 @@ Body *newHeader(int x, int y, char *text, int wrap) {
 	Body *b = newTextBox(x, y, text, wrap, ' ');
 	Stroke *s = newStroke(4, newBorder("="), newBorder("+"), newBorder("="), newBorder("+"));
 	b->addStroke(b,s);
-	setStrokeJoint(s, '+');
+	stroke.setStrokeJoint(s, '+');
 	return b;
 }
 
 int drawSide(int page) {
 	int i, j, n=3;
 	char *contents[] = {"Introduction", "Hello Hammertime!", "The Basics"};
-	char str[100][100];
+	char str[1000][1000];
 
 	registerBody("NULL", newTextBox(10, 1, "  HAMMERTIME  ", -1, '#'));
 	registerBody("NULL", newLine(2, 4, 150, 'h', '-'));
@@ -87,7 +87,7 @@ int run() {
 		Body *line = newLine(35, 1, 60, 'v', '-');
 		Stroke *lineStroke = newStroke(1, newBorder("|"));
 		line->addStroke(line, lineStroke);
-		setStrokeJoint(lineStroke, '#');
+		stroke.setStrokeJoint(lineStroke, '#');
 		registerBody("NULL", line);
 
 		draw();
