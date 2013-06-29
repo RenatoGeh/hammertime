@@ -30,7 +30,7 @@ void paintFunction(Body* b) {
 
 	for(i=-screen.width/2;i<=screen.width;i+=0.01) {
 		f = func->f(i);
-		paint(10*(i+screen.width/2), _poly_round((screen.height-50*f)-screen.height/2), c);
+		paint((i+screen.width/2), _poly_round((screen.height-f)-screen.height/2), c);
 		//printf("x=%f\tsin(x)=%f\n", i, func->f(i));
 	}
 }
