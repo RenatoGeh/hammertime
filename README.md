@@ -35,3 +35,12 @@ Introduction
 >
 >The original idea was to create a simple yet useful framework to use in
 >projects using C, that didn't require much knowledge in programming.
+
+Wiki
+====
+
+>Holy Mayonnaise! 
+>Take a look at this <href src="https://github.com/RenatoGeh/hammertime/wiki">WIKI-LEAKY</a>!
+>
+>The Wiki is open to contributors (see Wiki for more information on how to become one). 
+>That means any and all contributors are allowed (and encouraged) to create stubs or modify existing ones.
