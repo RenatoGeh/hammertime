@@ -40,7 +40,7 @@ Wiki
 ====
 
 >Holy Mayonnaise! 
->Take a look at this <href src="https://github.com/RenatoGeh/hammertime/wiki">WIKI-LEAKY</a>!
+>Take a look at our [Wiki](https://github.com/RenatoGeh/hammertime/wiki)!
 >
 >The Wiki is open to contributors (see Wiki for more information on how to become one). 
 >That means any and all contributors are allowed (and encouraged) to create stubs or modify existing ones.
