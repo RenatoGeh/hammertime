@@ -5,7 +5,9 @@
 #define _FUNCTION_RANGE 4
 
 struct function_utils {
+	double scaleX, scaleY;
 	void (*addAxis)(void);
+	void (*setScale)(double, double);
 } function;
 
 typedef struct funcstruct {
@@ -14,11 +16,7 @@ typedef struct funcstruct {
 	char *(*toString)(char *, struct funcstruct *);
 } Function;
 
-/* This is gonna be tricky. Do I have to test every instance of x? And if so,
- * how do I merge all that into a function formula? Wouldn't I have to test
- * every instance of x, meaning till infinity? I am at a lost here.
- * TODO: THE IMPOSSIBLE.
-*/
+/* I like oranges. Skittles are still better though. Sue me. */
 char *_function_toString(char *str, Function *f) {
 	return NULL;
 }
@@ -30,7 +28,8 @@ void paintFunction(Body* b) {
 
 	for(i=-screen.width/2;i<=screen.width;i+=0.01) {
 		f = func->f(i);
-		paint((i+screen.width/2), _poly_round((screen.height-f)-screen.height/2), c);
+		paint((i*function.scaleX+screen.width/2), 
+			_poly_round((screen.height-f*function.scaleY)-screen.height/2), c);
 		//printf("x=%f\tsin(x)=%f\n", i, func->f(i));
 	}
 }
@@ -69,8 +68,15 @@ void _function_addAxis() {
 	registerBody("_function_yaxis_label", newText(screen.width/2+1, 0, "y-axis", 1));
 }
 
+void _function_setScale(double x, double y) {
+	function.scaleX = x;
+	function.scaleY = y;
+}
+
 void _function_init() {
 	function.addAxis = _function_addAxis;
+	function.setScale = _function_setScale;
+	function.scaleX = function.scaleY = 1;
 }
 
 void _poly_conpts(int x0, int y0, int x1, int y1, Polynomial *poly) {
@@ -100,7 +106,9 @@ void paintPolynomial(Body *b) {
 			//printf("%d\t%d\n", p, poly->terms[j]);
 			f+=poly->terms[j]*p;
 		}
-		paint(i+screen.width/2, _poly_round((screen.height-f)-screen.height/2), nil?c:s->next(s, _STROKE_TOP));
+		paint(i*function.scaleX+screen.width/2, 
+			_poly_round((screen.height-f*function.scaleY)-screen.height/2), 
+			nil?c:s->next(s, _STROKE_TOP));
 	}
 }
 
